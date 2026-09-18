@@ -1,0 +1,144 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 480px;
+}
+
+.error {
+  font-size: 0.82rem;
+  color: var(--color-danger-ink);
+  background: var(--color-danger-wash);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.readOnlyRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.86rem;
+  color: var(--color-ink);
+}
+
+.label {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+}
+
+.inlineForm {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-2);
+}
+
+.inlineForm label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.inlineForm input {
+  font-size: 0.88rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.inlineForm input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash);
+}
+
+.inlineForm button {
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: none;
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.inlineForm button:hover {
+  background: var(--color-accent-hover);
+}
+
+.photoRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.photoPreview {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-full);
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.photoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.photoActions button {
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.photoActions button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.photoActions button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.toggleHost {
+  background: var(--color-sidebar-bg);
+  border-radius: var(--r-md);
+  padding: var(--sp-1);
+  display: inline-flex;
+}

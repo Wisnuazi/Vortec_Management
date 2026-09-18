@@ -1,0 +1,358 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 900px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.forbidden {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+}
+
+/* === DEC-076: filter bar — search + role + super-admin filters ========= */
+.filterBar {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1 1 240px;
+  min-width: 200px;
+  font-size: 0.88rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.filterSelect {
+  font-size: 0.84rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  min-width: 140px;
+}
+
+.emptyRow {
+  text-align: center;
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+  padding: var(--sp-5);
+}
+
+.loading {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+.error {
+  font-size: 0.82rem;
+  color: var(--color-danger-ink);
+  background: var(--color-danger-wash);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+}
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--sp-3);
+}
+
+.formGrid label,
+.createForm label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.formGrid input,
+.formGrid select {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.84rem;
+  color: var(--color-ink);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+/* DEC-069: form actions row uses shared <Button> (see Button.module.css). */
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.table th {
+  text-align: left;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--color-surface-sunken);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sortHeaderBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.sortArrow {
+  font-size: 0.6em;
+  color: var(--color-accent);
+}
+
+.table td {
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  background: var(--color-surface);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.nameCell {
+  font-weight: 600;
+  color: var(--color-ink);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.selfHint {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--color-ink-faint);
+}
+
+.emailHint {
+  font-size: 0.76rem;
+  color: var(--color-ink-faint);
+}
+
+.usernameInput {
+  margin-top: 2px;
+  width: 140px;
+  font-size: 0.76rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-ink-faint);
+}
+
+.usernameInput:hover,
+.usernameInput:focus {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  outline: none;
+}
+
+.table select {
+  font-size: 0.84rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.passwordCell {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.passwordMask {
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  color: var(--color-ink-faint);
+}
+
+.passwordForm {
+  display: flex;
+  gap: var(--sp-1);
+}
+
+.passwordForm input {
+  width: 120px;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.passwordForm button {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.deleteBtn:hover:not(:disabled) {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.deleteBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.roleMultiSelect {
+  position: relative;
+  min-width: 160px;
+}
+
+.roleMultiSelectTrigger {
+  width: 100%;
+  min-height: 34px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  cursor: pointer;
+  text-align: left;
+}
+
+.roleMultiSelectPlaceholder {
+  font-size: 0.82rem;
+  color: var(--color-ink-faint);
+}
+
+.roleChip {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-full);
+  padding: 0.12rem 0.5rem;
+}
+
+.roleMultiSelectMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 20;
+  width: 220px;
+  max-height: 260px;
+  overflow-y: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-md);
+  padding: var(--sp-1);
+}
+
+.roleMultiSelectOption {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.84rem;
+  color: var(--color-ink);
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+
+.roleMultiSelectOption:hover {
+  background: var(--color-surface-sunken);
+}

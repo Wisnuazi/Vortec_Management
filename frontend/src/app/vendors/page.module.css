@@ -1,0 +1,309 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 900px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+}
+
+.filterBar select {
+  font-size: 0.82rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.searchInput {
+  flex: 1 1 220px;
+  min-width: 180px;
+  font-size: 0.84rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.downloadBtn:hover:not(:disabled) {
+  background: var(--color-surface-sunken);
+}
+
+.downloadBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.trigger {
+  align-self: flex-start;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.trigger:hover {
+  background: var(--color-surface-sunken);
+}
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-3);
+}
+
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.formGrid input,
+.formGrid select {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.formActions button {
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.formActions button[type="submit"] {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: transparent;
+}
+
+.formActions button[type="submit"]:hover {
+  background: var(--color-accent-hover);
+}
+
+.formActions button:not([type="submit"]):hover {
+  background: var(--color-surface-sunken);
+}
+
+.sortBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+}
+
+.sortBar select {
+  font-size: 0.82rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.sortBar button {
+  font-size: 0.86rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.loading,
+.emptyHint,
+.hintSmall {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+.vendorList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.vendorItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.vendorTypeBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+  border-radius: var(--r-full);
+  padding: 0.15rem 0.55rem;
+  white-space: nowrap;
+}
+
+.vendorName {
+  font-weight: 600;
+  color: var(--color-ink);
+  min-width: 160px;
+}
+
+.vendorLink {
+  font-size: 0.82rem;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.vendorLink:hover {
+  text-decoration: underline;
+}
+
+.vendorActions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-left: auto;
+}
+
+.vendorActions button {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.vendorActions button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--color-danger) !important;
+  color: var(--color-danger) !important;
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background: var(--color-danger) !important;
+  color: #fff !important;
+}
+
+.inlineForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  width: 100%;
+}
+
+.inlineForm input,
+.inlineForm select {
+  flex: 1;
+  min-width: 120px;
+  font-size: 0.84rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.inlineForm button {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.inlineForm button:hover {
+  background: var(--color-surface-sunken);
+}

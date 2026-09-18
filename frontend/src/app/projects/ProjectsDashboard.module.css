@@ -1,0 +1,269 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.tileGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--sp-3);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+.tileValue {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.tileValue[data-tone="danger"] {
+  color: var(--color-danger);
+}
+
+.tileValue[data-tone="success"] {
+  color: var(--color-success);
+}
+
+.tileLabel {
+  font-size: 0.76rem;
+  color: var(--color-ink-muted);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--sp-4);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+.panelLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+}
+
+.emptyHint {
+  font-size: 0.84rem;
+  color: var(--color-ink-faint);
+}
+
+/* --- Stage bar chart: sequential (one hue, light->dark via opacity) for
+   the linear pipeline, reserved status colors for the two exception
+   states (ON_HOLD/REJECTED) — never mixed into the sequential ramp. --- */
+.stageList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stageRow {
+  display: grid;
+  grid-template-columns: 130px 1fr 28px;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.stageName {
+  font-size: 0.76rem;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stageTrack {
+  height: 10px;
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-full);
+}
+
+.stageBar {
+  height: 10px;
+  background: var(--color-info);
+  border-radius: var(--r-full);
+}
+
+.stageBarWarning {
+  height: 10px;
+  background: var(--color-warning);
+  border-radius: var(--r-full);
+}
+
+.stageBarDanger {
+  height: 10px;
+  background: var(--color-danger);
+  border-radius: var(--r-full);
+}
+
+.stageCount {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  text-align: right;
+}
+
+/* --- Task status stacked bar: reserved status palette, 2px surface gap
+   between segments, legend always present (>=2 series). --- */
+.stackedBar {
+  display: flex;
+  height: 16px;
+  border-radius: var(--r-full);
+  overflow: hidden;
+  gap: 2px;
+  background: var(--color-surface);
+}
+
+.stackedSegment {
+  height: 100%;
+  min-width: 2px;
+}
+
+.stackedSegment[data-status="TODO"] {
+  background: var(--color-border-strong);
+}
+.stackedSegment[data-status="IN_PROGRESS"] {
+  background: var(--color-info);
+}
+.stackedSegment[data-status="WAITING_APPROVAL"] {
+  background: var(--color-warning);
+}
+.stackedSegment[data-status="DONE"] {
+  background: var(--color-success);
+}
+.stackedSegment[data-status="REJECTED"] {
+  background: var(--color-danger);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  color: var(--color-ink-muted);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendDot[data-status="TODO"] {
+  background: var(--color-border-strong);
+}
+.legendDot[data-status="IN_PROGRESS"] {
+  background: var(--color-info);
+}
+.legendDot[data-status="WAITING_APPROVAL"] {
+  background: var(--color-warning);
+}
+.legendDot[data-status="DONE"] {
+  background: var(--color-success);
+}
+.legendDot[data-status="REJECTED"] {
+  background: var(--color-danger);
+}
+
+.mrList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mrItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  color: var(--color-ink);
+}
+
+.attentionList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.attentionRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--r-md);
+  text-decoration: none;
+  color: inherit;
+}
+
+.attentionRow:hover {
+  background: var(--color-surface-sunken);
+}
+
+.attentionKind {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-faint);
+}
+
+.attentionTitle {
+  flex: 1;
+  font-size: 0.86rem;
+  color: var(--color-ink);
+}
+
+.attentionDate {
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+}

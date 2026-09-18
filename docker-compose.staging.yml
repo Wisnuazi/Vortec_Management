@@ -1,0 +1,72 @@
+# Vortec Management — STAGING environment
+# --------------------------------------
+# Identical to docker-compose.yml in shape, but:
+#   - Different container name (`*-staging`) so it never collides with dev
+#   - Different host ports (5434 for Postgres, 4100 for backend, 3100 for frontend)
+#   - A dedicated Docker volume (`vortec_pgdata_staging`) so a staging
+#     reset cannot touch the dev database
+#   - A `staging` profile so a plain `docker compose up -d` (no profile)
+#     still only brings up the dev stack
+#
+# Usage:
+#   1. Copy `.env.staging.example` to `.env.staging` and adjust
+#   2. `docker compose -f docker-compose.staging.yml --profile staging up -d`
+#   3. Open http://localhost:3100
+
+name: vortec-management-staging
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: vortec-management-postgres-staging
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vortec
+      POSTGRES_PASSWORD: vortec_dev
+      POSTGRES_DB: vortec_management
+    ports:
+      # 5434 on the host so it never collides with the dev 5433
+      - "5434:5432"
+    volumes:
+      - vortec_pgdata_staging:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vortec -d vortec_management"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    profiles: ["staging"]
+
+  backend:
+    build:
+      context: ./backend
+    container_name: vortec-management-backend-staging
+    restart: unless-stopped
+    env_file:
+      - .env.staging
+    environment:
+      # Container-network DB host (NOT localhost) — same override as dev.
+      DATABASE_URL: postgresql://vortec:vortec_dev@db:5432/vortec_management?schema=public
+      PORT: "4000"
+      CORS_ORIGIN: http://localhost:3100
+    ports:
+      - "4100:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["staging"]
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:4100/api
+    container_name: vortec-management-frontend-staging
+    restart: unless-stopped
+    ports:
+      - "3100:3000"
+    depends_on:
+      - backend
+    profiles: ["staging"]
+
+volumes:
+  vortec_pgdata_staging:

@@ -1,0 +1,230 @@
+/* Role Charter page (/organization/role/[id]). The page is a focused
+   single-role read view; styling borrows from the existing organization
+   page (color tokens, spacing scale) but is independent so this route
+   can be deep-linked from anywhere (dashboard ROLE ANDA badges, the
+   Roles list "Lihat detail" link, the user profile page, etc.).
+
+   Color tokens are taken from the Vortec design system
+   (frontend/src/app/globals.css) so the page themes correctly in
+   both light and dark mode. See DEC-058 for the audit that caught
+   the previous use of non-existent tokens. */
+
+.wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 0 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.backLink {
+  display: inline-block;
+  font-size: 0.88rem;
+  color: var(--color-ink-muted);
+  text-decoration: none;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+.backLink:hover {
+  color: var(--color-ink);
+  text-decoration: underline;
+}
+.backLink:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.heroHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px 0 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.roleTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.floorBadge {
+  align-self: flex-start;
+  display: inline-block;
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-wash-border);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.heroHint {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-ink);
+}
+
+.subTitle {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-muted);
+  margin: 12px 0 4px;
+}
+
+.countChip {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+.description {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+}
+
+.emptyInline {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--color-ink-muted);
+  font-style: italic;
+}
+
+.jobdeskList {
+  margin: 0;
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--color-ink);
+}
+
+.jobdeskItem {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-ink);
+}
+
+.jobdeskItem::marker {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 720px) {
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+}
+
+.coSupervisorBlock {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.relatedList {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.relatedLink {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+.relatedLink:hover {
+  text-decoration: underline;
+}
+.relatedLink:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.relatedHint {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+  font-style: italic;
+}
+
+.employeeList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.employeeItem {
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  color: var(--color-ink);
+}
+
+.editHint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-warning-ink);
+  padding: 12px 16px;
+  background: var(--color-warning-wash);
+  border: 1px dashed var(--color-warning);
+  border-radius: 8px;
+}
+
+.editLink {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+.editLink:hover {
+  text-decoration: underline;
+}

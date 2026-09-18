@@ -1,0 +1,2090 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 1080px;
+}
+
+.backLink {
+  align-self: flex-start;
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--color-accent);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.myTaskHint {
+  font-size: 0.86rem;
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+  display: inline-block;
+  width: fit-content;
+}
+
+.loading,
+.emptyHint {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.editGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--sp-3);
+}
+
+.editGrid label,
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.editGrid input,
+.editGrid select,
+.formGrid input,
+.formGrid select {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.summaryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  font-size: 0.84rem;
+  color: var(--color-ink-muted);
+}
+
+.sectionLabel {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  margin-bottom: var(--sp-1);
+}
+
+/* --- DEC-068: Lock toggle + status filter panels ------------------- */
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.lockToggle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--r-full);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.lockToggle:hover {
+  background: var(--color-surface-sunken);
+}
+
+.lockToggleOn {
+  background: var(--color-danger);
+  color: #fff;
+  border-color: var(--color-danger);
+}
+
+.lockToggleOn:hover {
+  background: var(--color-danger);
+  opacity: 0.9;
+}
+
+.lockedHint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--color-warning-wash);
+  color: var(--color-warning-ink);
+  padding: 0.7rem 1rem;
+  border-radius: var(--r-md);
+  font-size: 0.86rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.statusPanels {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin: var(--sp-2) 0 var(--sp-3);
+}
+
+.statusPanel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.statusPanel:hover {
+  background: var(--color-surface-sunken);
+}
+
+.statusPanelActive {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: transparent;
+}
+
+.statusPanel_SUBMITTED.statusPanelActive {
+  background: var(--color-info-wash);
+  color: var(--color-info-ink);
+  border-color: transparent;
+}
+
+.statusPanel_APPROVED.statusPanelActive {
+  background: var(--color-success-wash);
+  color: var(--color-success-ink);
+  border-color: transparent;
+}
+
+.statusPanel_PROCESSING.statusPanelActive {
+  background: var(--color-warning-wash);
+  color: var(--color-warning-ink);
+  border-color: transparent;
+}
+
+.statusPanel_COMPLETED.statusPanelActive {
+  background: var(--color-accent-wash);
+  color: var(--color-accent-ink);
+  border-color: transparent;
+}
+
+.statusPanel_REJECTED.statusPanelActive {
+  background: var(--color-danger-wash);
+  color: var(--color-danger-ink);
+  border-color: transparent;
+}
+
+.statusPanelCount {
+  font-size: 0.72rem;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 0.05rem 0.45rem;
+  border-radius: var(--r-full);
+  font-weight: 700;
+}
+
+.statusPanelActive .statusPanelCount {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cardTypeBadge {
+  display: inline-block;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--r-md);
+  background: var(--color-accent-wash);
+  color: var(--color-accent-ink);
+  white-space: nowrap;
+}
+
+.cardTypeBadge[data-bomtype="MBOM"] { background: #fde7c2; color: #6b3f00; }
+.cardTypeBadge[data-bomtype="EBOM"] { background: #d2e8ff; color: #1d3f7a; }
+.cardTypeBadge[data-bomtype="SBOM"] { background: #e0d4ff; color: #3f1d7a; }
+.cardTypeBadge[data-bomtype="QBOM"] { background: #d8f3d8; color: #1d5a1d; }
+
+.hintSmall {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  color: var(--color-ink-faint);
+}
+
+.notes {
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--color-ink);
+}
+
+.problemLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 64px;
+  font-family: var(--font-inter);
+  font-size: 0.86rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  resize: vertical;
+}
+
+.deleteProjectBtn {
+  align-self: flex-start;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-danger);
+  background: transparent;
+  color: var(--color-danger);
+  cursor: pointer;
+}
+
+.deleteProjectBtn:hover {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.docList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.docItemWrap {
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-md);
+}
+
+.docItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.84rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.docItemClickable {
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  transition: background 0.12s ease;
+}
+.docItemClickable:hover {
+  background: var(--color-surface-sunken);
+}
+.docItemClickable:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Highlight: my task in the gantt unscheduled list. */
+.docItemMine {
+  background: var(--color-accent-wash);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--r-sm);
+}
+
+.docAttachToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-full);
+  padding: 0.15rem 0.55rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.docAttachToggle:hover {
+  color: var(--color-ink);
+}
+
+.docAttachPanel {
+  padding: 0 0.6rem 0.6rem 0.6rem;
+}
+
+.docName {
+  flex: 1;
+  color: var(--color-ink);
+}
+
+.docDone {
+  color: var(--color-ink-faint);
+  text-decoration: line-through;
+}
+
+.docTeam {
+  font-size: 0.72rem;
+  color: var(--color-ink-faint);
+  background: var(--color-surface);
+  border-radius: var(--r-full);
+  padding: 0.15rem 0.55rem;
+  white-space: nowrap;
+}
+
+/* DEC-064: multi-role checkbox group for task creation */
+.roleCheckboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+.roleCheckboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+}
+.roleCheckboxLabel:hover {
+  background: var(--color-surface-sunken);
+}
+
+/* --- View switcher --- */
+
+.viewSwitcher {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.viewTabs {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 2px;
+}
+
+.viewTab {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+
+.viewTab:hover {
+  color: var(--color-ink);
+}
+
+.viewTabActive {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--sh-sm);
+}
+
+/* --- Add-task/project forms --- */
+
+.trigger {
+  align-self: flex-start;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.trigger:hover {
+  background: var(--color-surface-sunken);
+}
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--sp-3);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.84rem;
+  color: var(--color-ink);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.formActions button {
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.formActions button[type="submit"] {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: transparent;
+}
+
+.formActions button[type="submit"]:hover {
+  background: var(--color-accent-hover);
+}
+
+.formActions button:not([type="submit"]):hover {
+  background: var(--color-surface);
+}
+
+.formActions button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* DEC-069: compact default AddTaskForm — only the essentials show,
+   everything else hides behind this disclosure. */
+.moreOptionsToggle {
+  align-self: flex-start;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+.moreOptionsToggle:hover {
+  color: var(--color-ink);
+}
+
+.formError {
+  font-size: 0.8rem;
+  color: var(--color-danger-ink);
+  background: var(--color-danger-wash);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+  margin: 0;
+}
+
+/* DEC-065: required asterisk inside form labels. */
+.required {
+  color: var(--color-danger);
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+/* DEC-065: full-width row inside AddTaskForm grid (the MultiSelect). */
+.formGrid .fullRow {
+  grid-column: 1 / -1;
+}
+
+.fieldInput {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+
+.fieldInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash);
+}
+
+/* --- Shared badges --- */
+
+.roleBadge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-full);
+  padding: 0.12rem 0.5rem;
+}
+
+.approvalBadge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-warning-ink);
+  background: var(--color-warning-wash);
+  border-radius: var(--r-full);
+  padding: 0.12rem 0.5rem;
+}
+
+/* DEC-064: document review badges */
+.reviewBadge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  border-radius: var(--r-full);
+  padding: 0.12rem 0.5rem;
+}
+.reviewApproved {
+  color: var(--color-success-ink);
+  background: var(--color-success-wash);
+}
+.reviewRevision {
+  color: var(--color-warning-ink);
+  background: var(--color-warning-wash);
+}
+
+.docReviewedBy {
+  font-size: 0.68rem;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+/* DEC-064: document review action panel */
+.docReviewPanel {
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.docReviewActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.reviewNoteInput {
+  flex: 1;
+  min-width: 140px;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 0.84rem;
+}
+.reviewNoteInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+.approveBtn {
+  background: var(--color-success);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.approveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.rejectBtn {
+  background: var(--color-danger);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.rejectBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dueDate {
+  font-size: 0.7rem;
+  color: var(--color-ink-faint);
+}
+
+.approvedBy {
+  font-size: 0.7rem;
+  color: var(--color-success);
+}
+
+/* --- Kanban --- */
+
+.kanbanBoard {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(180px, 1fr));
+  gap: var(--sp-3);
+  overflow-x: auto;
+  padding-bottom: var(--sp-2);
+}
+
+.kanbanCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-2);
+  min-height: 120px;
+  transition: border-color 0.1s, background 0.1s;
+}
+
+.kanbanColOver {
+  border-color: var(--color-accent);
+  background: var(--color-accent-wash);
+}
+
+.kanbanColHead {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.kanbanColCount {
+  font-weight: 600;
+  color: var(--color-ink-faint);
+}
+
+.kanbanColBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.kanbanCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+  cursor: grab;
+}
+
+.kanbanCard[draggable="false"] {
+  cursor: default;
+  opacity: 0.85;
+}
+
+/* Highlight: task assigned to one of the caller's roles. Different
+   border + wash so it's visually distinct from "someone else's
+   task you can read but not own" — DEC-053 visibility split. */
+.kanbanCardMine {
+  border-color: var(--color-accent);
+  background: var(--color-accent-wash);
+}
+.kanbanCardMine[draggable="true"] {
+  cursor: grab;
+}
+
+.kanbanExpanded {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding-top: var(--sp-2);
+  border-top: 1px dashed var(--color-border);
+  margin-top: var(--sp-1);
+}
+
+.kanbanExpandRow {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-1);
+}
+
+.kanbanExpandBtn {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-ink-muted);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--r-sm);
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+.kanbanExpandBtn:hover {
+  color: var(--color-ink);
+  border-color: var(--color-accent);
+}
+.kanbanExpandBtn span {
+  color: var(--color-ink-faint);
+}
+
+.mineBadge {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--r-full);
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  line-height: 1.2;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mineBadgeInline {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.05rem 0.35rem;
+  border-radius: var(--r-full);
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  line-height: 1.2;
+  white-space: nowrap;
+  margin-left: var(--sp-2);
+  vertical-align: middle;
+}
+
+.kanbanCardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.kanbanCardTitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.3;
+}
+
+.kanbanCardDelete {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.kanbanCardDelete:hover {
+  color: var(--color-danger);
+}
+
+.kanbanCardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.kanbanCardBadges {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.kanbanCardClickable {
+  cursor: pointer;
+}
+.kanbanCardClickable:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* --- Gantt --- */
+
+.gantt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.ganttHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  color: var(--color-ink-faint);
+}
+
+.ganttChart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--sp-2);
+}
+
+.ganttToday {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--color-accent);
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.ganttRow {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px) 1fr;
+  gap: var(--sp-3);
+  align-items: center;
+}
+
+.ganttRowClickable {
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  padding: 4px 6px;
+  margin: 0 -6px;
+  transition: background 0.12s ease;
+}
+.ganttRowClickable:hover {
+  background: var(--color-surface-sunken);
+}
+.ganttRowClickable:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.ganttLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ganttLabelTitle {
+  font-size: 0.8rem;
+  color: var(--color-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ganttTrack {
+  position: relative;
+  height: 20px;
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-sm);
+}
+
+.ganttBar {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: var(--r-sm);
+  min-width: 6px;
+}
+
+/* Highlight: my task bar in the gantt. Stronger outline + glow so it
+   pops against the lighter status-tinted bars. */
+.ganttBarMine {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 2px var(--color-accent-wash);
+}
+
+.ganttBarTodo {
+  background: var(--color-ink-faint);
+}
+
+.ganttBarInProgress {
+  background: var(--color-info);
+}
+
+.ganttBarWaiting {
+  background: var(--color-warning);
+}
+
+.ganttBarDone {
+  background: var(--color-success);
+}
+
+.ganttBarRejected {
+  background: var(--color-danger);
+}
+
+.ganttUnscheduled {
+  margin-top: var(--sp-2);
+}
+
+/* --- Timeline --- */
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-left: 2px solid var(--color-border);
+  margin-left: 6px;
+}
+
+.timelineItem {
+  position: relative;
+  padding: 0 0 var(--sp-4) var(--sp-4);
+}
+
+.timelineItemClickable {
+  cursor: pointer;
+  border-radius: var(--r-sm);
+  transition: background 0.12s ease;
+}
+.timelineItemClickable:hover {
+  background: var(--color-surface-sunken);
+}
+.timelineItemClickable:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Highlight: my task in the timeline. The left edge picks up the
+   accent color so it stands out from the default neutral line. */
+.timelineItemMine {
+  background: var(--color-accent-wash);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--r-sm);
+  padding-left: calc(var(--sp-4) + 0.25rem);
+}
+
+.timelineItem:last-child {
+  padding-bottom: 0;
+}
+
+.timelineDot {
+  position: absolute;
+  left: -7px;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-ink-faint);
+  border: 2px solid var(--color-surface);
+}
+
+.timelineDotTodo {
+  background: var(--color-ink-faint);
+}
+
+.timelineDotInProgress {
+  background: var(--color-info);
+}
+
+.timelineDotWaiting {
+  background: var(--color-warning);
+}
+
+.timelineDotDone {
+  background: var(--color-success);
+}
+
+.timelineDotRejected {
+  background: var(--color-danger);
+}
+
+.timelineContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.timelineTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.timelineTitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.timelineStatus {
+  font-size: 0.72rem;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+}
+
+.timelineMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.timelineDates {
+  font-size: 0.74rem;
+  color: var(--color-ink-faint);
+}
+
+.timelineDescription {
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+  line-height: 1.5;
+}
+
+/* --- Material requests (reuses list/row/pill patterns) --- */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.row {
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.projName {
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.stagePill {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-full);
+  white-space: nowrap;
+  background: var(--color-surface);
+  color: var(--color-ink-muted);
+}
+
+.mrStatus_APPROVED,
+.mrStatus_PROCESSING {
+  background: var(--color-info-wash);
+  color: var(--color-info-ink);
+}
+
+.mrStatus_COMPLETED {
+  background: var(--color-success-wash);
+  color: var(--color-success-ink);
+}
+
+.mrStatus_REJECTED {
+  background: var(--color-danger-wash);
+  color: var(--color-danger-ink);
+}
+
+.materialRequestHead {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0.7rem 0.9rem;
+}
+
+.materialItemRow {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+}
+
+.materialItemRow input {
+  font-size: 0.84rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  flex: 2;
+}
+
+.materialItemQty {
+  flex: 1 !important;
+  min-width: 60px;
+}
+
+.materialItemUnit {
+  flex: 1 !important;
+  min-width: 70px;
+}
+
+.materialItemRow button {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.materialItemRow button:hover {
+  color: var(--color-danger);
+}
+
+.addDocTrigger {
+  align-self: flex-start;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.addDocTrigger:hover {
+  background: var(--color-surface-sunken);
+}
+
+/* --- Task table (list) view --- */
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  cursor: grab;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  touch-action: pan-y;
+}
+
+.tableWrap::-webkit-scrollbar {
+  display: none;
+}
+
+.tableWrap:global(.dragScrolling) {
+  cursor: grabbing;
+}
+
+.taskTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.taskTable th {
+  text-align: left;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--color-surface-sunken);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.taskTable td {
+  padding: var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  background: var(--color-surface);
+  white-space: nowrap;
+}
+
+.taskTable tr:last-child td {
+  border-bottom: none;
+}
+
+.taskTableTitle {
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: normal;
+}
+
+.taskTable select {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+/* Catatan column — give it room and let long notes wrap. */
+.taskTable .taskNoteCell {
+  min-width: 16rem;
+  max-width: 28rem;
+  vertical-align: top;
+}
+.taskTable .taskNoteCell .taskNoteEditor,
+.taskTable .taskNoteCell .taskNoteReadOnly {
+  width: 100%;
+}
+
+.taskRowClickable {
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.taskRowClickable:hover {
+  background: var(--color-surface-sunken);
+}
+.taskRowClickable:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: -2px;
+}
+
+.sortHeaderBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.sortArrow {
+  font-size: 0.6em;
+  color: var(--color-accent);
+}
+
+/* --- Workflow diagram (n8n-style node flow) --- */
+
+.workflowWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.workflowHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.workflowFilterMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.workflowHint {
+  font-size: 0.74rem;
+  color: var(--color-ink-faint);
+  font-style: italic;
+}
+
+.workflowFilterActive {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+  border: 1px solid var(--color-accent-wash-border);
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+}
+
+.workflowFilterClear {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-sm);
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.workflowFilterClear:hover {
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+  border-color: var(--color-accent-wash-border);
+}
+
+.workflowFilterClear svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* DEC-065: make the node a button (already a button in JSX) — keep visuals. */
+.workflowNode {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  width: 96px;
+  padding: var(--sp-3) var(--sp-2);
+  border-radius: var(--r-lg);
+  border: 1.5px solid var(--color-border-strong);
+  background: var(--color-surface-sunken);
+  text-align: center;
+  font: inherit;
+  color: inherit;
+  cursor: default;
+  transition: transform var(--dur-fast) ease, box-shadow var(--dur-fast) ease, border-color var(--dur-fast) ease, background-color var(--dur-fast) ease;
+}
+
+.workflowNode[data-interactive="true"] {
+  cursor: pointer;
+}
+
+.workflowNode[data-interactive="true"]:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-md);
+  border-color: var(--color-accent);
+}
+
+.workflowNode[data-interactive="true"]:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.workflowNode:disabled {
+  /* The button is enabled but when onSelect is missing, disable click affordances. */
+}
+
+.workflowNodeSelected {
+  border-color: var(--color-accent) !important;
+  background: var(--color-accent-wash) !important;
+  box-shadow: 0 0 0 3px var(--color-accent-wash-border);
+}
+
+.workflowNodeSelected .workflowNodeLabel {
+  color: var(--color-ink) !important;
+}
+
+.workflowScroll {
+  overflow-x: auto;
+  padding: var(--sp-4) var(--sp-2);
+  cursor: grab;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  touch-action: pan-y;
+}
+
+.workflowScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.workflowScroll:global(.dragScrolling) {
+  cursor: grabbing;
+}
+
+.workflowRow {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+}
+
+.workflowNodeGroup {
+  display: flex;
+  align-items: center;
+}
+
+.workflowNodeIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.74rem;
+  background: var(--color-surface);
+  color: var(--color-ink-muted);
+  border: 1.5px solid var(--color-border-strong);
+}
+
+.workflowNodeLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  line-height: 1.25;
+}
+
+.wfNode_done {
+  border-color: var(--color-success);
+  background: var(--color-success-wash);
+}
+
+.wfNode_done .workflowNodeIcon {
+  background: var(--color-success);
+  color: #fff;
+  border-color: var(--color-success);
+}
+
+.wfNode_done .workflowNodeLabel {
+  color: var(--color-success-ink);
+}
+
+.wfNode_current {
+  border-color: var(--color-accent);
+  background: var(--color-accent-wash);
+}
+
+.wfNode_current .workflowNodeIcon {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: var(--color-accent);
+}
+
+.wfNode_current .workflowNodeLabel {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.wfNode_upcoming {
+  opacity: 0.55;
+}
+
+.wfNode_faded {
+  opacity: 0.35;
+}
+
+.wfNode_hold {
+  border-color: var(--color-warning);
+  background: var(--color-warning-wash);
+}
+
+.wfNode_hold .workflowNodeIcon {
+  background: var(--color-warning);
+  color: #fff;
+  border-color: var(--color-warning);
+}
+
+.wfNode_rejected {
+  border-color: var(--color-danger);
+  background: var(--color-danger-wash);
+}
+
+.wfNode_rejected .workflowNodeIcon {
+  background: var(--color-danger);
+  color: #fff;
+  border-color: var(--color-danger);
+}
+
+.workflowPulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--r-lg);
+  border: 2px solid var(--color-accent);
+  animation: workflowPulse 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.wfNode_hold .workflowPulse,
+.wfNode_rejected .workflowPulse {
+  border-color: currentColor;
+}
+
+@keyframes workflowPulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+.workflowConnector {
+  display: flex;
+  align-items: center;
+  width: 28px;
+  height: 1.5px;
+  background: var(--color-border-strong);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.workflowConnectorDone {
+  background: var(--color-success);
+}
+
+.workflowArrow {
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  color: inherit;
+  color: var(--color-border-strong);
+}
+
+.workflowConnectorDone .workflowArrow {
+  color: var(--color-success);
+}
+
+/* --- Attachments (shared: Task / Document / Material Request) --- */
+
+.attachmentWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.attachmentEmpty {
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+  margin: 0;
+}
+
+.attachmentList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.attachmentItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.8rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 0.35rem 0.6rem;
+}
+
+.attachmentLink {
+  flex: 1;
+  color: var(--color-accent);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachmentLink:hover {
+  text-decoration: underline;
+}
+
+.attachmentMeta {
+  font-size: 0.68rem;
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+}
+
+.attachmentRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  padding: 0.15rem;
+}
+
+.attachmentRemove:hover {
+  color: var(--color-danger);
+}
+
+/* Edit + delete actions (replaces the single trash button when canEdit).
+   Two side-by-side icon buttons; hover state distinguishes the two. */
+.attachmentActions {
+  display: inline-flex;
+  gap: 0.15rem;
+  margin-left: 0.35rem;
+}
+
+.attachmentActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  border-radius: var(--r-sm);
+  font-size: 0;
+}
+.attachmentActionBtn:hover {
+  color: var(--color-ink);
+  background: var(--color-surface-sunken);
+  border-color: var(--color-border);
+}
+.attachmentActionBtn:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 1px;
+}
+.attachmentActionDanger:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* Inline edit form (shown when the pencil is clicked). Stacks below the
+   row label, wraps on narrow widths. */
+.attachmentEditRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  width: 100%;
+}
+.attachmentEditRow input {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--r-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+.attachmentEditRow input:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 1px;
+  border-color: var(--color-accent);
+}
+.attachmentEditName {
+  width: 100%;
+}
+.attachmentEditUrl {
+  width: 100%;
+}
+.attachmentEditActions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+.attachmentEditActions button {
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+.attachmentEditActions button:first-child {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: var(--color-accent);
+}
+.attachmentEditActions button:hover {
+  border-color: var(--color-accent);
+}
+.attachmentReplaceBtn {
+  /* Visual cue that this replaces the file payload, not just renames it. */
+  font-style: italic;
+}
+
+.attachmentUpload {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-1);
+}
+
+.attachmentUploadActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.attachmentLinkForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-md);
+  padding: var(--sp-2);
+}
+
+.attachmentLinkForm input {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  min-width: 160px;
+  flex: 1;
+}
+
+.attachmentUpload button {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.attachmentUpload button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.attachmentUpload button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.attachmentError {
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--color-danger-ink);
+  margin: 0;
+}
+
+.subtaskWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* Task note (catatan) editor — see DEC-052 follow-up.
+   Three modes share these classes:
+   - Read-only display (plain text)
+   - Inline-trigger button (placeholder + click-to-edit)
+   - Active textarea (autosize, blur-to-save) */
+.taskNoteEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.taskNoteEditor textarea {
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--r-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  resize: none;
+  overflow: hidden;
+  min-height: 2.4rem;
+}
+
+.taskNoteEditor textarea:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: -1px;
+  border-color: var(--color-accent);
+}
+
+.taskNoteEditorActions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.72rem;
+  color: var(--color-ink-muted);
+}
+
+.taskNoteSaving,
+.taskNoteError {
+  font-weight: 500;
+}
+.taskNoteError {
+  color: var(--color-danger-ink);
+}
+
+.taskNoteHint {
+  flex: 1;
+  font-style: italic;
+}
+
+.taskNoteCancel {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-ink-muted);
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--r-sm);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+.taskNoteCancel:hover {
+  color: var(--color-ink);
+  border-color: var(--color-border-strong);
+}
+
+.taskNoteTrigger {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--color-surface-sunken);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--r-sm);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  cursor: text;
+  word-break: break-word;
+  min-height: 2.4rem;
+  transition:
+    border-color var(--dur-fast),
+    background var(--dur-fast);
+}
+.taskNoteTrigger:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-wash);
+}
+.taskNoteTrigger:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.taskNoteReadOnly {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--color-ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.taskNoteText {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.taskNoteEmpty {
+  color: var(--color-ink-faint);
+  font-style: italic;
+}
+
+/* Compact (single-line) mode used in narrow surfaces (kanban card bottom). */
+.taskNoteCompactTrigger {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: var(--color-ink-muted);
+  cursor: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.taskNoteCompactTrigger:hover {
+  color: var(--color-ink);
+}
+
+.taskNoteCompactEditor {
+  width: 100%;
+}
+.taskNoteCompactEditor input {
+  font: inherit;
+  font-size: 0.74rem;
+  width: 100%;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--r-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+.taskNoteCompactEditor input:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.subtaskList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.subtaskItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.8rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 0.35rem 0.6rem;
+}
+
+.subtaskCheckLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: 1;
+  cursor: pointer;
+}
+
+.subtaskTitle {
+  color: var(--color-ink);
+}
+
+.subtaskTitleDone {
+  color: var(--color-ink-faint);
+  text-decoration: line-through;
+}
+
+.subtaskAddForm {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.subtaskAddForm input {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  min-width: 160px;
+  flex: 1;
+}
+
+.subtaskAddForm button {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.subtaskAddForm button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.subtaskAddForm button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.subtaskProgressBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-full);
+  padding: 0.15rem 0.55rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.subtaskProgressBadge:hover {
+  color: var(--color-ink);
+}
+
+.subtaskProgressBadge[data-complete="true"] {
+  color: var(--color-success-ink);
+  border-color: var(--color-success);
+}
+
+.attachBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.68rem;
+  color: var(--color-ink-faint);
+}

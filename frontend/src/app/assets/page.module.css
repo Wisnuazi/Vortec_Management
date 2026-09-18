@@ -1,0 +1,469 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 900px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.loading,
+.emptyHint {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+/* === Toolbar (search + download) ========================================== */
+.toolbar {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1 1 240px;
+  min-width: 200px;
+  font-size: 0.88rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.downloadBtn:hover:not(:disabled) {
+  background: var(--color-surface-sunken);
+}
+
+.downloadBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* === Add asset form ====================================================== */
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-3);
+}
+
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.formGrid input,
+.formGrid select {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.fullRow {
+  grid-column: 1 / -1;
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+/* === Asset list (DEC-075) — expandable row pattern =====================
+   Replaces the old 9-column table. Each row is a button-shaped card that
+   shows the essentials collapsed and a detail panel on click. No
+   horizontal scroll, no overflow. */
+
+.assetList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.assetCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+
+.assetCard:hover {
+  border-color: var(--color-border-strong);
+}
+
+.assetCardExpanded {
+  border-color: var(--color-accent);
+}
+
+.assetRowHead {
+  display: grid;
+  grid-template-columns: 56px 100px minmax(0, 1.6fr) minmax(0, 1.4fr) 60px 32px;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  color: var(--color-ink);
+  font: inherit;
+}
+
+.assetRowHead:hover {
+  background: var(--color-surface-sunken);
+}
+
+.assetRowHead:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: -2px;
+}
+
+.assetThumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-sm);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.assetThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.assetThumbPlaceholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-surface-sunken),
+    var(--color-surface-sunken) 4px,
+    var(--color-border) 4px,
+    var(--color-border) 5px
+  );
+  opacity: 0.5;
+}
+
+/* Subtle hover hint that the thumbnail opens a lightbox. Only shown
+   on photos that actually have a URL. */
+.assetThumb[role="button"]:hover .assetThumbHint {
+  opacity: 1;
+}
+
+.assetThumbHint {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--dur-fast) ease;
+}
+
+.assetCellCode {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-accent);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.assetCellName {
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.assetCellFloor {
+  color: var(--color-ink-muted);
+  font-size: 0.86rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.assetCellFloorUsage {
+  color: var(--color-ink-faint);
+  font-size: 0.78rem;
+}
+
+.assetCellQty {
+  font-weight: 700;
+  color: var(--color-ink);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.assetChevron {
+  color: var(--color-ink-faint);
+  transition: transform var(--dur-fast) ease, color var(--dur-fast) ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assetChevronOpen {
+  transform: rotate(180deg);
+  color: var(--color-accent);
+}
+
+/* === Asset detail panel (expansion) ====================================== */
+.assetDetail {
+  padding: var(--sp-4) var(--sp-5);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-sunken);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.assetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-4);
+  margin: 0;
+}
+
+.assetGrid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.assetGrid dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+  font-weight: 600;
+  margin: 0;
+}
+
+.assetGrid dd {
+  font-size: 0.9rem;
+  color: var(--color-ink);
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.assetGridFull {
+  grid-column: 1 / -1;
+}
+
+.assetActions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+/* === Asset edit form (inside the expansion panel) ======================= */
+.assetEditForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.assetEditGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-3);
+}
+
+.assetEditGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.assetEditGrid input {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.assetEditFull {
+  grid-column: 1 / -1;
+}
+
+/* === Photo picker (used in edit + add form) ============================== */
+.photoPicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  align-items: flex-start;
+}
+
+.photoPreview {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border);
+}
+
+.photoPlaceholder {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--color-ink-faint);
+}
+
+.photoPickerActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.photoPickerActions button {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.photoPickerActions button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.photoError {
+  font-size: 0.74rem;
+  color: var(--color-danger);
+}
+
+/* === Lightbox (DEC-075) =================================================
+   Full-size photo overlay. Click backdrop or X to close; Escape
+   key also closes. body scroll is locked while open. */
+
+.lightboxBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--sp-5);
+  cursor: zoom-out;
+  animation: lightboxFadeIn var(--dur-fast) ease;
+}
+
+@keyframes lightboxFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightboxImg {
+  max-width: min(95vw, 1280px);
+  max-height: 95vh;
+  object-fit: contain;
+  border-radius: var(--r-md);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  cursor: default;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease;
+}
+
+.lightboxClose:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.lightboxClose:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* === Loading state ======================================================== */
+.tableWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}

@@ -1,0 +1,422 @@
+/* TaskDrawer — Lark-style slide-in side panel for editing a single task.
+   The drawer is rendered into the project detail page; it locks body
+   scroll while open, responds to Esc, and closes on scrim click.
+
+   Color tokens are taken from the Vortec design system
+   (frontend/src/app/globals.css) so the drawer themes correctly in
+   both light and dark mode. See DEC-058 for the audit that caught
+   the previous use of non-existent tokens (--color-text,
+   --color-surface-hover, --color-accent-soft, --color-focus, etc.)
+   which silently fell back to hardcoded light values and made text
+   invisible on the dark surface. */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(8, 12, 20, 0.45);
+  display: flex;
+  justify-content: flex-end;
+  animation: scrimFadeIn 0.18s ease-out;
+}
+
+@keyframes scrimFadeIn {
+  from { background: rgba(8, 12, 20, 0); }
+  to   { background: rgba(8, 12, 20, 0.45); }
+}
+
+@keyframes drawerSlideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+.drawer {
+  width: min(720px, 96vw);
+  max-width: 96vw;
+  height: 100dvh;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--sh-lg);
+  animation: drawerSlideIn 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .drawer {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .drawer {
+    width: 100vw;
+  }
+}
+
+/* --- header ----------------------------------------------------------- */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 1;
+}
+
+.statusBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.statusPill {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-wash-border);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.4;
+}
+.statusPill:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.statusPill:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.headerMeta {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, monospace);
+}
+
+.closeBtn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  color: var(--color-ink-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.closeBtn:hover {
+  background: var(--color-surface-sunken);
+  color: var(--color-ink);
+}
+.closeBtn:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* --- body ------------------------------------------------------------- */
+
+.body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 20px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.titleInput {
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: transparent;
+  color: inherit;
+  width: 100%;
+  font-family: inherit;
+}
+.titleInput:hover:not(:disabled) {
+  border-color: var(--color-border);
+}
+.titleInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: var(--color-surface-sunken);
+}
+.titleInput:disabled {
+  cursor: default;
+}
+
+.savingHint {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  align-self: flex-end;
+}
+
+/* --- fields row (assigned role / start / due) ------------------------- */
+
+.fieldsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  padding: 12px 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fieldRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.fieldControl {
+  min-width: 0;
+}
+
+.fieldInput,
+.fieldReadonly {
+  font-size: 0.92rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: inherit;
+  min-width: 140px;
+}
+.fieldReadonly {
+  border-color: transparent;
+  padding-left: 0;
+  background: transparent;
+}
+.fieldInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+/* DEC-064: multi-role checkbox group in task assignment */
+.roleCheckboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.roleCheckboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.roleCheckboxLabel:hover {
+  background: var(--color-surface-sunken);
+}
+
+/* --- approval box ----------------------------------------------------- */
+
+.approvalBox {
+  background: var(--color-warning-wash);
+  border: 1px solid var(--color-warning);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.approvalHead {
+  font-weight: 600;
+  color: var(--color-warning-ink);
+}
+.approvalDetail {
+  font-size: 0.88rem;
+  color: var(--color-warning-ink);
+}
+.approvalHint {
+  font-size: 0.85rem;
+  color: var(--color-warning-ink);
+}
+.approvalDate {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+}
+
+/* --- sections (description / notes / subtasks / attachments) ---------- */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sectionTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.sectionToggle {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 4px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
+}
+.sectionToggle:hover {
+  background: var(--color-surface-sunken);
+}
+.sectionToggle:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.caret {
+  display: inline-block;
+  font-size: 0.7rem;
+  transition: transform 0.15s ease;
+  color: var(--color-ink-muted);
+}
+.caret[data-open="true"] {
+  transform: rotate(90deg);
+}
+
+.sectionBody {
+  padding-left: 4px;
+}
+
+.descriptionArea {
+  width: 100%;
+  resize: vertical;
+  min-height: 96px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font: inherit;
+  background: var(--color-surface);
+  color: inherit;
+}
+.descriptionArea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+.descriptionArea:disabled {
+  background: transparent;
+  cursor: default;
+}
+
+.progressChip {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  background: var(--color-surface-sunken);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.progressBar {
+  height: 6px;
+  background: var(--color-surface-sunken);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 2px 0 4px;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-warning);
+  transition: width 0.2s ease;
+}
+.progressFill[data-complete="true"] {
+  background: var(--color-success);
+}
+
+/* --- meta ------------------------------------------------------------- */
+
+.metaSection {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metaRow {
+  display: flex;
+  gap: 12px;
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+}
+
+.metaLabel {
+  font-weight: 600;
+  min-width: 96px;
+}
+
+.metaValue {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, monospace);
+}
+
+/* --- footer (delete) -------------------------------------------------- */
+
+.footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: inherit;
+}
+
+.deleteBtn {
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: 8px;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  cursor: pointer;
+}
+.deleteBtn:hover {
+  background: var(--color-danger-wash);
+}
+.deleteBtn:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}

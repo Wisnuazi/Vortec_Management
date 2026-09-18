@@ -1,0 +1,457 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 780px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.filterBar {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1 1 240px;
+  min-width: 200px;
+  font-size: 0.88rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.downloadBtn:hover:not(:disabled) {
+  background: var(--color-surface-sunken);
+}
+
+.downloadBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.duplicateExistingLine {
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 0.5rem 0.7rem;
+  font-size: 0.88rem;
+  color: var(--color-ink);
+}
+
+.mergeForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.mergeForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.mergeForm input {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.duplicateDialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  background: var(--color-warning-wash);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4) var(--sp-5);
+}
+
+.duplicateDialog p {
+  font-size: 0.88rem;
+  color: var(--color-ink);
+  line-height: 1.5;
+}
+
+.duplicateTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-warning-ink);
+  margin: 0;
+}
+
+.loading,
+.emptyHint {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+.sortBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+}
+
+.sortBar select {
+  font-size: 0.82rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.sortBar button {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.sortBar button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-3);
+}
+
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.formGrid input {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+/* DEC-069: form actions row uses shared <Button> (see Button.module.css). */
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.row {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.rowExpanded {
+  border-color: var(--color-accent);
+}
+
+.rowHead {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  background: none;
+  border: none;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.88rem;
+  color: var(--color-ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+  border-radius: var(--r-sm);
+  padding: 0.1rem 0.4rem;
+  flex-shrink: 0;
+}
+
+.matName {
+  flex: 1;
+  font-weight: 600;
+}
+
+.unit {
+  color: var(--color-ink-faint);
+  font-size: 0.78rem;
+}
+
+.stockBadge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-full);
+  padding: 0.2rem 0.65rem;
+}
+
+.chevron {
+  color: var(--color-ink-faint);
+  font-size: 0.7rem;
+  transition: transform 0.15s;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+  color: var(--color-accent);
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: 0 0.9rem 1rem;
+}
+
+.summaryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+}
+
+.inColor {
+  color: var(--color-success);
+}
+
+.outColor {
+  color: var(--color-danger);
+}
+
+.notes {
+  font-size: 0.84rem;
+  color: var(--color-ink-muted);
+}
+
+.sectionLabel {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  margin-bottom: var(--sp-1);
+}
+
+.movementActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.inBtn,
+.outBtn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.inBtn {
+  color: var(--color-success);
+}
+
+.outBtn {
+  color: var(--color-danger);
+}
+
+.inBtn:hover,
+.outBtn:hover {
+  background: var(--color-surface-sunken);
+}
+
+.movementForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+}
+
+.movementForm input {
+  font-size: 0.84rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.movementForm button {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.movementForm button:hover {
+  background: var(--color-surface);
+  opacity: 0.85;
+}
+
+.movementForm button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.movementError {
+  width: 100%;
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-danger-ink);
+}
+
+.movementList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.movementItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: 0.82rem;
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-md);
+  padding: 0.4rem 0.6rem;
+}
+
+.movementDate {
+  color: var(--color-ink-faint);
+  font-size: 0.76rem;
+}
+
+.movementNote {
+  flex: 1;
+  color: var(--color-ink-muted);
+  font-size: 0.78rem;
+}
+
+.movementDeleteBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.movementDeleteBtn:hover {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.deleteMaterialBtn {
+  align-self: flex-start;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-danger);
+  background: transparent;
+  color: var(--color-danger);
+  cursor: pointer;
+}
+
+.deleteMaterialBtn:hover {
+  background: var(--color-danger);
+  color: #fff;
+}

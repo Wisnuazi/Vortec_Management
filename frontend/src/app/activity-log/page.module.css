@@ -1,0 +1,243 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 1100px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.loading,
+.emptyHint {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+.forbidden {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sectionLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  margin-bottom: var(--sp-3);
+}
+
+.feedHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+.feedHead .sectionLabel {
+  margin-bottom: 0;
+}
+
+.filterTabs {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 2px;
+}
+
+.filterTab {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+
+.filterTab:hover {
+  color: var(--color-ink);
+}
+
+.filterTabActive {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--sh-sm);
+}
+
+/* DEC-077: online-section styles removed — presence indicator lives in
+   the Topbar now. */
+
+/* DEC-078: search + date-range filter bar that lives between the
+   PageHeader and the activity feed. Same look as the /admin/users
+   filter row so the two long-table pages read as a family. */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.searchField {
+  position: relative;
+  flex: 1 1 260px;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+}
+
+.searchField input {
+  width: 100%;
+  padding: 0.55rem 0.75rem 0.55rem 2.1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--r-md);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 0.86rem;
+  font-family: inherit;
+}
+
+.searchField input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.6rem;
+  display: inline-flex;
+  color: var(--color-ink-faint);
+  pointer-events: none;
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.74rem;
+  color: var(--color-ink-muted);
+}
+
+.dateField input {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--r-md);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 0.84rem;
+  font-family: inherit;
+}
+
+.dateField input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash);
+}
+
+.dateLabel {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.resultHint {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  margin-left: auto;
+  align-self: center;
+}
+
+.feedSection {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+.feedList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.feedItem {
+  display: grid;
+  grid-template-columns: 150px 90px 1fr 140px;
+  gap: var(--sp-3);
+  align-items: baseline;
+  font-size: 0.84rem;
+  padding: 0.5rem 0.3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.feedItem:last-child {
+  border-bottom: none;
+}
+
+.feedTime {
+  font-size: 0.76rem;
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+}
+
+.feedDescription {
+  color: var(--color-ink);
+}
+
+.feedUser {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  text-align: right;
+}
+
+@media (max-width: 620px) {
+  .feedItem {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .feedUser {
+    text-align: left;
+  }
+}

@@ -1,0 +1,551 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.hint {
+  font-size: 0.86rem;
+  color: var(--color-ink-muted);
+  line-height: 1.6;
+  max-width: 80ch;
+}
+
+.subtabs {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--sp-2);
+}
+
+.subtab {
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--r-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+
+.subtab:hover {
+  background: var(--color-surface-sunken);
+  color: var(--color-ink);
+}
+
+.subtabActive {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: transparent;
+}
+
+.subtabMuted {
+  font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.8;
+  margin-left: 0.3rem;
+}
+
+.trigger {
+  align-self: flex-start;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.trigger:hover {
+  background: var(--color-surface-sunken);
+}
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4) var(--sp-5);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-3);
+}
+
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.formGrid input {
+  font-size: 0.86rem;
+  font-weight: 400;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.formActions button {
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.formActions button[type="submit"] {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: transparent;
+}
+
+.formActions button[type="submit"]:hover {
+  background: var(--color-accent-hover);
+}
+
+.formActions button:not([type="submit"]):hover {
+  background: var(--color-surface-sunken);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.table th {
+  text-align: left;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--color-surface-sunken);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table td {
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+  background: var(--color-surface);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table input {
+  font-size: 0.82rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  width: 100%;
+  min-width: 80px;
+}
+
+.approverTag {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  background: var(--color-success-wash);
+  color: var(--color-success-ink);
+  border-radius: var(--r-md);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.78rem;
+}
+
+.unapproved {
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+  font-style: italic;
+}
+
+.notesLink {
+  font-size: 0.8rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.notesLink:hover {
+  text-decoration: underline;
+}
+
+.hintSmall {
+  font-size: 0.74rem;
+  color: var(--color-ink-faint);
+}
+
+.statusPill {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.18rem 0.55rem;
+  border-radius: var(--r-full);
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+}
+
+.status_SUBMITTED {
+  background: var(--color-info-wash);
+  color: var(--color-info-ink);
+}
+
+.status_APPROVED {
+  background: var(--color-success-wash);
+  color: var(--color-success-ink);
+}
+
+.status_REJECTED {
+  background: var(--color-danger-wash);
+  color: var(--color-danger-ink);
+}
+
+.status_PROCESSING {
+  background: var(--color-warning-wash);
+  color: var(--color-warning-ink);
+}
+
+.status_ARRIVED {
+  background: var(--color-accent-wash);
+  color: var(--color-accent-ink);
+}
+
+.rowActions {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.rowActions button {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.rowActions button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent !important;
+  border: 1px solid var(--color-danger) !important;
+  color: var(--color-danger) !important;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  padding: 0;
+}
+
+.deleteBtn:hover {
+  background: var(--color-danger) !important;
+  color: #fff !important;
+}
+
+.inlineForm {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.inlineForm input {
+  flex: 1;
+  min-width: 140px;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.inlineForm button {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.inlineForm button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.approveBtn {
+  background: var(--color-success) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+.approveBtn:hover {
+  background: var(--color-success) !important;
+  opacity: 0.9;
+}
+
+.rejectBtn {
+  background: transparent !important;
+  border-color: var(--color-danger) !important;
+  color: var(--color-danger) !important;
+}
+
+.rejectBtn:hover {
+  background: var(--color-danger) !important;
+  color: #fff !important;
+}
+
+/* --- DEC-067: Open/Close BOM header + submission cards ---------------- */
+
+.bomHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.bomStatusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--r-full);
+}
+
+.bomStatusOpen {
+  background: var(--color-info-wash);
+  color: var(--color-info-ink);
+}
+
+.bomStatusClosed {
+  background: var(--color-success-wash);
+  color: var(--color-success-ink);
+}
+
+.closeBtn {
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-danger);
+  background: transparent;
+  color: var(--color-danger);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.closeBtn:hover {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.closeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.closeBtnHint {
+  font-size: 0.72rem;
+  color: var(--color-ink-faint);
+  margin-top: 0.3rem;
+  max-width: 36ch;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  user-select: none;
+}
+
+.cardHeader:hover {
+  background: var(--color-surface-sunken);
+}
+
+.cardTypeBadge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--r-md);
+  background: var(--color-accent-wash);
+  color: var(--color-accent-ink);
+  white-space: nowrap;
+}
+
+.cardTypeBadge_MBOM {
+  background: #fde7c2;
+  color: #6b3f00;
+}
+.cardTypeBadge_EBOM {
+  background: #d2e8ff;
+  color: #1d3f7a;
+}
+.cardTypeBadge_SBOM {
+  background: #e0d4ff;
+  color: #3f1d7a;
+}
+.cardTypeBadge_QBOM {
+  background: #d8f3d8;
+  color: #1d5a1d;
+}
+
+.cardItemName {
+  flex: 1;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardItemCount {
+  font-size: 0.74rem;
+  color: var(--color-ink-faint);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cardSubmitter {
+  font-size: 0.74rem;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+}
+
+.cardChevron {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  color: var(--color-ink-faint);
+  transition: transform 0.15s;
+}
+
+.cardChevronOpen {
+  transform: rotate(180deg);
+}
+
+.cardBody {
+  border-top: 1px solid var(--color-border);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--color-surface-sunken);
+}
+
+.cardTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.cardTable th {
+  text-align: left;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  padding: var(--sp-2) var(--sp-2);
+  background: transparent;
+}
+
+.cardTable td {
+  padding: var(--sp-2) var(--sp-2);
+  border-top: 1px solid var(--color-border);
+  vertical-align: top;
+  background: transparent;
+}
+
+.cardTable input {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  width: 100%;
+  min-width: 80px;
+}
+
+.bomClosedBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-success-wash);
+  color: var(--color-success-ink);
+  padding: 0.7rem 1rem;
+  border-radius: var(--r-md);
+  font-size: 0.86rem;
+  font-weight: 500;
+}

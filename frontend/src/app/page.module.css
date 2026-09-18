@@ -1,0 +1,631 @@
+/* ==========================================================================
+   Vortec Management — Dashboard styles
+   Refresh: hero greeting, iconified tiles, featured attention card,
+   quick action row, panel icon headers. Tone-aware color tokens.
+   ========================================================================== */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 1180px;
+}
+
+/* === Hero greeting ======================================================== */
+/* DEC-080: dashboard hero greeting card.
+   Previously a solid red gradient (--color-accent → --color-accent-hover)
+   which made the first thing a user sees a wall of red — visually
+   aggressive, painful for extended viewing. Same DEC-071 spirit
+   (no solid red wash on the dashboard) but applied to the hero
+   greeting.
+
+   New look: neutral surface + thin border + 4px accent stripe on the
+   left edge so brand colour is present without flooding the eye.
+   The date pill uses a soft accent wash (--color-accent-wash) with
+   an accent border + accent text — same outline + dot pattern as
+   the rest of the dashboard (SeverityBadge style).
+*/
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-5) var(--sp-6);
+  border-radius: var(--r-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-accent);
+  color: var(--color-ink);
+  box-shadow: var(--sh-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle decoration: faded circles in the corner. Muted neutral
+   so they don't compete with the accent stripe. */
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -60px;
+  top: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: var(--color-surface-sunken);
+  opacity: 0.6;
+  pointer-events: none;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  right: 40px;
+  bottom: -80px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--color-surface-sunken);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.heroMain {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 220px;
+  z-index: 1;
+}
+
+.heroGreeting {
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.heroName {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0;
+  color: var(--color-ink);
+}
+
+.heroHint {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  max-width: 60ch;
+  margin: 6px 0 0;
+  color: var(--color-ink-muted);
+}
+
+.heroMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  background: var(--color-accent-wash);
+  border: 1px solid var(--color-accent-wash-border);
+  color: var(--color-accent);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+/* === Role panel =========================================================== */
+.rolePanel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-3) var(--sp-4);
+  color: var(--color-ink-muted);
+}
+
+.roleLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.roleBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.roleBadge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--r-full);
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.roleBadgeLink {
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+.roleBadgeLink:hover {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+.roleBadgeLink:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.roleBadgeAdmin {
+  background: var(--color-ink);
+  color: var(--color-surface);
+}
+
+.roleBadgeNone {
+  font-size: 0.8rem;
+  color: var(--color-ink-faint);
+  font-style: italic;
+}
+
+/* === Stat tiles (icon + value + label + arrow) ============================ */
+.tileGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-3);
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  text-decoration: none;
+  color: var(--color-ink);
+  transition: border-color var(--dur-fast) ease, transform var(--dur-fast) ease, box-shadow var(--dur-normal) ease, background-color var(--dur-fast) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tile:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--sh-md);
+}
+
+.tile:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Tone border accent on hover for visual feedback */
+.tile[data-tone="danger"]:hover { border-color: var(--color-danger); }
+.tile[data-tone="warning"]:hover { border-color: var(--color-warning); }
+.tile[data-tone="info"]:hover { border-color: var(--color-info); }
+
+.tileIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+  flex-shrink: 0;
+  position: relative;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+/* DEC-071: tone is communicated by a 3px corner dot instead of a
+   saturated wash background. The icon stays neutral so the dashboard
+   doesn't read as a sea of red / amber / blue chips. */
+.tileIcon[data-tone]::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.tileIcon[data-tone="danger"] { color: var(--color-danger); }
+.tileIcon[data-tone="warning"] { color: var(--color-warning); }
+.tileIcon[data-tone="info"] { color: var(--color-info); }
+.tileIcon[data-tone]:not([data-tone="danger"]):not([data-tone="warning"]):not([data-tone="info"]) {
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+}
+.tileIcon[data-tone]:not([data-tone="danger"]):not([data-tone="warning"]):not([data-tone="info"])::after { display: none; }
+
+.tileBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.tileValue {
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+/* DEC-071: severity lives in the corner dot on .tileIcon, not the
+   numeric value itself — otherwise the dashboard reads as a wall of
+   red. The label text + count already says "Overdue: 5" clearly. */
+.tileValue[data-tone] { color: var(--color-ink); }
+
+.tileLabel {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  margin-top: 2px;
+}
+
+.tileArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--color-ink-faint);
+  background: var(--color-surface-sunken);
+  flex-shrink: 0;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+.tile:hover .tileArrow {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  transform: translateX(2px);
+}
+
+/* === Quick actions ======================================================== */
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--sp-2);
+}
+
+.quickAction {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 10px var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  text-decoration: none;
+  color: var(--color-ink);
+  font-size: 0.84rem;
+  font-weight: 500;
+  transition: border-color var(--dur-fast) ease, background-color var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+.quickAction:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.quickAction:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.quickActionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+  flex-shrink: 0;
+}
+.quickAction:hover .quickActionIcon {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+}
+
+.quickActionLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === Grid panels =========================================================
+   DEC-074: uniform dashboard layout. Every card uses the same min-height
+   so the row doesn't render with uneven columns (BOM card used to be
+   2x taller than Purchasing just because it had 6 mini-stats). The
+   grid is fixed to 1/2/3 columns by breakpoint so the rhythm stays
+   predictable regardless of how many cards the role renders. */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+  align-items: stretch;
+}
+@media (min-width: 760px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1240px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  min-height: 220px;
+  transition: border-color var(--dur-fast) ease;
+}
+
+/* Filler — pushes the "see all" action to the bottom of the card so
+   actions align across cards in the same row. */
+.panelFiller {
+  flex: 1;
+}
+
+/* Tone-aware left border accent for panels with priority content */
+.panel[data-tone="warning"] {
+  border-left: 3px solid var(--color-warning);
+}
+.panel[data-tone="danger"] {
+  border-left: 3px solid var(--color-danger);
+}
+.panel[data-tone="info"] {
+  border-left: 3px solid var(--color-info);
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.panelTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.panelIcon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-ink-muted);
+}
+.panel[data-tone="warning"] .panelIcon { color: var(--color-warning); }
+.panel[data-tone="danger"] .panelIcon { color: var(--color-danger); }
+.panel[data-tone="info"] .panelIcon { color: var(--color-info); }
+
+.panelLink {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--r-sm);
+  transition: background-color var(--dur-fast) ease;
+}
+.panelLink:hover {
+  background: var(--color-accent-wash);
+  text-decoration: none;
+}
+
+.emptyHint {
+  font-size: 0.82rem;
+  color: var(--color-ink-faint);
+  margin: 0;
+}
+
+/* DEC-074: uniform mini-stat grid. Fixed 2-column layout so 4 or 6
+   stats wrap predictably (no more 4+2 broken layout for the BOM
+   card). Each tile has a thin label/value pair with the value
+   leading. */
+.miniStats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3) var(--sp-4);
+}
+
+.miniStat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-sm);
+}
+
+.miniStat strong {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.miniStat span {
+  font-size: 0.72rem;
+  color: var(--color-ink-muted);
+  line-height: 1.3;
+}
+
+.stageChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stageChip {
+  font-size: 0.74rem;
+  color: var(--color-ink-muted);
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-full);
+  padding: 0.2rem 0.6rem;
+}
+
+.stageChip strong {
+  color: var(--color-ink);
+  margin-left: 4px;
+}
+
+/* === Task list ============================================================ */
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.taskRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 8px 10px;
+  border-radius: var(--r-md);
+  text-decoration: none;
+  color: inherit;
+  font-size: 0.84rem;
+  transition: background-color var(--dur-fast) ease;
+}
+
+.taskRow:hover {
+  background: var(--color-surface-sunken);
+}
+
+.taskRow:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.taskTitle {
+  flex: 1;
+  color: var(--color-ink);
+  min-width: 120px;
+  font-weight: 500;
+}
+
+.taskProject {
+  font-size: 0.72rem;
+  color: var(--color-ink-faint);
+}
+
+.taskStatus {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-full);
+  padding: 0.1rem 0.5rem;
+  white-space: nowrap;
+}
+
+.taskDue {
+  font-size: 0.72rem;
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+}
+
+/* === Activity list ======================================================= */
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activityRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.8rem;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+}
+
+.activityDesc {
+  flex: 1;
+  color: var(--color-ink);
+  min-width: 140px;
+}
+
+.activityMeta {
+  font-size: 0.72rem;
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+}
+
+/* === Responsive ========================================================== */
+@media (max-width: 720px) {
+  .hero {
+    padding: var(--sp-5);
+  }
+  .heroName {
+    font-size: 1.6rem;
+  }
+  .tileGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .tileValue {
+    font-size: 1.4rem;
+  }
+  .quickActions {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .tileGrid {
+    grid-template-columns: 1fr;
+  }
+  .quickActions {
+    grid-template-columns: 1fr 1fr;
+  }
+}

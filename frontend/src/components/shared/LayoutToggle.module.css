@@ -1,0 +1,31 @@
+.toggle {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 2px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 26px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: var(--color-ink);
+}
+
+.btnActive {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--sh-sm);
+}

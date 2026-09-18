@@ -1,0 +1,70 @@
+# Environment
+.env
+.env.local
+.env.*.local
+.env.staging
+
+# Secrets
+*.key
+*.pem
+secrets/
+
+# Local debug/test artifacts with hardcoded credentials or captured auth tokens
+/verify_notif_fix.js
+/smoke_test.py
+/smoke_test2.py
+/scripts/de078-smoke.ps1
+/scripts/_dev_test_member.ps1
+/scripts/_dev_patch_doc_attachment.ps1
+/scripts/_dev_patch_attachment.ps1
+/scripts/_dev_reset_su.cjs
+/evidence/hash-pw.js
+/backend/login.json
+/backend/_login.json
+/backend/login_resp.json
+/backend/_login_resp.json
+/backend/_tarmono_resp.json
+/backend/_dirga_resp.json
+
+# One-off curl/API scratch dumps from manual backend testing (not app source)
+/backend/_*.json
+/backend/_*.sql
+/backend/prisma/_fix.py
+/evidence/reset-pw.sql
+
+# Database backups (created by tools/backup-db.ps1)
+tools/backups/
+
+# Logs
+*.log
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+dist/
+build/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+temp/
+.cache/

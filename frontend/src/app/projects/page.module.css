@@ -1,0 +1,263 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 820px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  max-width: 68ch;
+  line-height: 1.6;
+}
+
+.loading,
+.emptyHint {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+.sortBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+}
+
+.sortBar select {
+  font-size: 0.82rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.sortBar button {
+  font-size: 0.78rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.sortBar button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-3);
+}
+
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.hintSmall {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--color-ink-faint);
+}
+
+.formGrid input,
+.formGrid select {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.problemLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 64px;
+  font-family: var(--font-inter);
+  font-size: 0.86rem;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  resize: vertical;
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.formActions button {
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.formActions button[type="submit"] {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: transparent;
+}
+
+.formActions button[type="submit"]:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.formActions button:not([type="submit"]):hover:not(:disabled) {
+  background: var(--color-surface-sunken);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.formError {
+  font-size: 0.8rem;
+  color: var(--color-danger-ink);
+  background: var(--color-danger-wash);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+  margin: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--sp-3);
+}
+
+.gridCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+  font-size: 0.88rem;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.gridCard:hover {
+  border-color: var(--color-accent);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 0.7rem 0.9rem;
+  font-size: 0.88rem;
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.row:hover {
+  border-color: var(--color-accent);
+}
+
+.projName {
+  font-weight: 600;
+}
+
+.client {
+  color: var(--color-ink-faint);
+  font-size: 0.78rem;
+}
+
+.stagePill {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-full);
+  white-space: nowrap;
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+}
+
+.stage_RELEASED {
+  background: var(--color-success-wash);
+  color: var(--color-success-ink);
+}
+
+.stage_ON_HOLD {
+  background: var(--color-warning-wash);
+  color: var(--color-warning-ink);
+}
+
+.stage_REJECTED {
+  background: var(--color-danger-wash);
+  color: var(--color-danger-ink);
+}
+
+.stage_TESTING,
+.stage_FINAL_REVIEW,
+.stage_PACKAGING {
+  background: var(--color-info-wash);
+  color: var(--color-info-ink);
+}
+
+.docProgress {
+  font-size: 0.74rem;
+  color: var(--color-ink-faint);
+  white-space: nowrap;
+}

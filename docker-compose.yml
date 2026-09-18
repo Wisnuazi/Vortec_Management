@@ -1,0 +1,64 @@
+name: vortec-management
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: vortec-management-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vortec
+      POSTGRES_PASSWORD: vortec_dev
+      POSTGRES_DB: vortec_management
+    ports:
+      # Host port 5433 -> avoids clashing with any other local Postgres (e.g. port 5432).
+      - "5433:5432"
+    volumes:
+      - vortec_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vortec -d vortec_management"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: vortec-management-backend
+    restart: unless-stopped
+    # Secrets (JWT_SECRET, SUPER_ADMIN_PASSWORD, etc.) come from your local,
+    # gitignored backend/.env — never baked into the image or this file.
+    # DATABASE_URL/PORT/CORS_ORIGIN below override whatever's in that file,
+    # since the container needs the in-network DB host, not localhost.
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://vortec:vortec_dev@db:5432/vortec_management?schema=public
+      PORT: "4000"
+      CORS_ORIGIN: http://localhost:3000
+      # DEC-064: where the Linux container stores uploaded attachments.
+      # Bound to the Windows host folder so files are accessible from both.
+      ATTACHMENT_BASE_PATH: /data/attachments
+    volumes:
+      # DEC-064: bind-mount D:\Internal Vortec\Vortec Management\attachment
+      # into the Linux container at /data/attachments
+      - D:/Internal Vortec/Vortec Management/attachment:/data/attachments
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:4000/api
+    container_name: vortec-management-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  vortec_pgdata:

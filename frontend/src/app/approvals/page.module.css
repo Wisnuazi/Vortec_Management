@@ -1,0 +1,29 @@
+/* DEC-082: page-level layout for /approvals and its sub-routes.
+   Card-level styles moved to
+   @/components/approvals/ApprovalCards.module.css so sub-route pages
+   share them via CSS Modules. */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 900px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.loading,
+.emptyHint {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}

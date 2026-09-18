@@ -1,0 +1,41 @@
+.switch {
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--r-md);
+  padding: 2px;
+}
+
+.btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--color-sidebar-ink-dim);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.4rem 0.3rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background var(--dur-fast),
+    color var(--dur-fast);
+}
+
+.btn:hover {
+  color: var(--color-sidebar-ink);
+}
+
+.btnActive {
+  background: var(--color-sidebar-active);
+  color: #fff;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-sidebar-active);
+  outline-offset: 2px;
+}

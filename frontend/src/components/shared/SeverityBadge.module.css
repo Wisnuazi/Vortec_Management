@@ -1,0 +1,46 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--r-full);
+  white-space: nowrap;
+  /* DEC-071: outline-first severity — no solid fills. Solid reds are
+     reserved for destructive CTAs (delete, close). The badge only
+     needs to communicate state, not demand attention. */
+  border: 1px solid transparent;
+}
+
+/* Leading dot for each severity so the badge reads as "severity: value"
+   without needing a colored background fill. */
+.badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.urgent {
+  color: var(--color-danger);
+  background: transparent;
+  border-color: var(--color-danger);
+}
+
+.warning {
+  color: var(--color-warning);
+  background: transparent;
+  border-color: var(--color-warning);
+}
+
+.info {
+  color: var(--color-info);
+  background: transparent;
+  border-color: var(--color-info);
+}

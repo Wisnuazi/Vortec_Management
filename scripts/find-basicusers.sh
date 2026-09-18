@@ -1,0 +1,1 @@
+find /app/.next -name "*.js" -exec grep -l "basicUsers" {} \; 2>/dev/null | head -5

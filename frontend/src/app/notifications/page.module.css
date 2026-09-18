@@ -1,0 +1,205 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 800px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.loading,
+.emptyHint {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+.rowApproval {
+  border-color: var(--color-accent);
+}
+
+.approvalTag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+  border-radius: var(--r-full);
+  padding: 0.15rem 0.6rem;
+  white-space: nowrap;
+}
+
+.approvalBanner {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--color-accent-on);
+  background: var(--color-accent);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  text-decoration: none;
+}
+
+.approvalBanner:hover {
+  background: var(--color-accent-hover);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.sectionLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 600;
+}
+
+/* Intro paragraph above a tab's sections (used on the BOM tab). */
+.sectionHint {
+  font-size: 0.86rem;
+  color: var(--color-ink-muted);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 62ch;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  text-decoration: none;
+  color: inherit;
+}
+
+.row:hover {
+  background: var(--color-surface-sunken);
+}
+
+.rowOverdue {
+  border-color: var(--color-danger);
+}
+
+.projectTag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+  border-radius: var(--r-full);
+  padding: 0.15rem 0.6rem;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--color-ink);
+  flex: 1;
+}
+
+.roleBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-full);
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+}
+
+.dueDate {
+  font-size: 0.8rem;
+  color: var(--color-ink-faint);
+}
+
+.rowOverdue .dueDate {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+/* DEC-063: persistent-notification inbox */
+.sectionHeadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.linkBtn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+}
+
+.linkBtn:hover {
+  text-decoration: underline;
+}
+
+.approvalRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.approvalRow:hover {
+  background: var(--color-surface-sunken);
+}
+
+.approvalRowUnread {
+  border-left: 3px solid var(--color-accent);
+}
+
+.approvalRowHead {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  font-size: 0.92rem;
+  color: var(--color-ink);
+}
+
+.approvalTagUnread {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+}
+
+.notes {
+  font-size: 0.84rem;
+  color: var(--color-ink-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.hintSmall {
+  font-size: 0.74rem;
+  color: var(--color-ink-faint);
+}

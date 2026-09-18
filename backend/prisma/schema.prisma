@@ -1,0 +1,817 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id             String            @id @default(cuid())
+  title          String
+  jobDescription String            @default("")
+  parentId       String?
+  parent         Role?             @relation("RoleHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children       Role[]            @relation("RoleHierarchy")
+  taskRoles       TaskRole[]
+  jobdesk        Jobdesk[]
+  userRoles      UserRole[]
+  // DEC-067: which BomType(s) this role is allowed to submit. The
+  // previous logic hardcoded a single owner-role per type in
+  // routes/bom.ts; this array makes the rule per-role (data-driven) so
+  // OM can adjust it in the org structure UI without code change.
+  // Default seed (migration 20260916050000_dec067_role_bom_types):
+  //   Mechanical Engineer   → ["MBOM"]
+  //   Electrical Engineer   → ["EBOM"]
+  //   Software Development  → ["SBOM"]
+  //   Quality Control       → ["QBOM"]
+  //   Project Manager + Operational Manager → all four
+  //   Director / Purchasing / Operational Leader → []
+  // Privileged users (super admin / OM / PM) bypass this gate via
+  // `isPrivileged()` in the route — see DEC-067.
+  allowedBomTypes BomType[]        @default([])
+  // Additive "dual supervision" edges, separate from the parentId tree — see
+  // DEC-019. supervisedBy: roles that also supervise this role (e.g. Project
+  // Manager co-supervising the Technical & Quality Team alongside their tree
+  // parent, Operational Leader). supervises: the inverse.
+  supervisedBy   RoleSupervision[] @relation("SupervisedRole")
+  supervises     RoleSupervision[] @relation("SupervisingRole")
+  // Optional single-floor scope for an Assets role (e.g. "Assets Lantai 1").
+  // Null for every other role. A user holding a floor-scoped role can only
+  // view/manage that floor's assets — see DEC-049 and floors.ts's
+  // assetAccessScope().
+  floorId        String?
+  floor          Floor?            @relation(fields: [floorId], references: [id], onDelete: SetNull)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+}
+
+// A many-to-many "also supervises" edge, additive to Role.parentId's
+// single-parent tree. See DEC-019 (supersedes DEC-003).
+model RoleSupervision {
+  id           String   @id @default(cuid())
+  roleId       String
+  role         Role     @relation("SupervisedRole", fields: [roleId], references: [id], onDelete: Cascade)
+  supervisorId String
+  supervisor   Role     @relation("SupervisingRole", fields: [supervisorId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+
+  @@unique([roleId, supervisorId])
+}
+
+// A user can hold multiple roles (e.g. someone who is both Operational
+// Leader and Mechanical Engineer). Permission checks resolve against the
+// full set of a user's roleIds, not a single one.
+model UserRole {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+}
+
+model Jobdesk {
+  id        String   @id @default(cuid())
+  text      String
+  order     Int      @default(0)
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Floor {
+  id          String   @id @default(cuid())
+  label       String
+  usage       String
+  description String   @default("")
+  order       Int      @default(0)
+  assets      Asset[]
+  // Roles scoped to this floor only (e.g. "Assets Lantai 1") — see Role.floorId.
+  scopedRoles Role[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Asset {
+  id         String    @id @default(cuid())
+  code       String?   @unique
+  name       String
+  quantity   Int       @default(1)
+  notes      String    @default("")
+  // Unit price (Rp), separate from notes so it can be shown/sorted as its
+  // own column rather than embedded as free text.
+  price      Float?
+  // Optional client-resized photo, same base64-data-URL-in-the-DB pattern as
+  // User.avatarUrl (DEC-012) — no object storage service in this project.
+  photoUrl   String?   @db.Text
+  // Optional procurement/acquisition date, so an asset's age can be shown.
+  acquiredAt DateTime?
+  floorId    String
+  floor      Floor     @relation(fields: [floorId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+// Vendor directory for the Purchasing menu — a company or a marketplace
+// listing/link Purchasing sources materials from.
+enum VendorType {
+  COMPANY
+  MARKETPLACE
+}
+
+model Vendor {
+  id        String     @id @default(cuid())
+  name      String
+  type      VendorType @default(COMPANY)
+  link      String?
+  contact   String?
+  notes     String     @default("")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Material {
+  id        String          @id @default(cuid())
+  code      String?         @unique
+  name      String
+  unit      String
+  notes     String          @default("")
+  movements StockMovement[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+enum MovementType {
+  IN
+  OUT
+}
+
+model StockMovement {
+  id         String       @id @default(cuid())
+  type       MovementType
+  quantity   Float
+  note       String       @default("")
+  materialId String
+  material   Material     @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  createdAt  DateTime     @default(now())
+}
+
+model User {
+  id                         String             @id @default(cuid())
+  email                      String             @unique
+  username                   String?            @unique
+  passwordHash               String
+  name                       String
+  isSuperAdmin               Boolean            @default(false)
+  avatarUrl                  String?
+  theme                      String             @default("system")
+  locale                     String             @default("id")
+  userRoles                  UserRole[]
+  projects                   Project[]
+  approvedTasks              Task[]             @relation("TaskApprovedBy")
+  materialRequestsSubmitted  MaterialRequest[]  @relation("MaterialRequestRequestedBy")
+  materialRequestsReviewed   MaterialRequest[]  @relation("MaterialRequestReviewedBy")
+  materialRequestsProcessed  MaterialRequest[]  @relation("MaterialRequestProcessedBy")
+  reviewedDocuments         ProjectDocument[] @relation("DocumentReviewedBy")
+  attachments               Attachment[]       @relation("AttachmentUploadedBy")
+  activityLogs               ActivityLog[]
+  documentTemplatesCreated   DocumentTemplate[] @relation("DocumentTemplateCreatedBy")
+  // DEC-066: SOP + Workflow library audit (who created / last updated).
+  sopsCreated                SOP[]              @relation("SopCreatedBy")
+  sopsUpdated                SOP[]              @relation("SopUpdatedBy")
+  workflowsCreated           Workflow[]         @relation("WorkflowCreatedBy")
+  workflowsUpdated           Workflow[]         @relation("WorkflowUpdatedBy")
+  bomItemsSubmitted          BomItem[]          @relation("BomItemSubmittedBy")
+  bomItemsApproved           BomItem[]          @relation("BomItemApprovedBy")
+  bomItemsProcessed          BomItem[]          @relation("BomItemProcessedBy")
+  notifications              Notification[]     @relation("NotificationUser")
+  // DEC-067: projects whose BOM this user closed (PM/OM).
+  projectsBomClosed          Project[]          @relation("ProjectBomClosedBy")
+  // DEC-068: projects whose MaterialRequest submissions this user locked.
+  projectsMaterialRequestLocked Project[]      @relation("ProjectMaterialRequestLockedBy")
+  dailyReports               DailyReport[]
+  kasbonPhasesCreated        KasbonPhase[]      @relation("KasbonPhaseCreatedBy")
+  kasbonSubmissionsSubmitted KasbonSubmission[] @relation("KasbonSubmissionSubmittedBy")
+  kasbonSubmissionsReviewed  KasbonSubmission[] @relation("KasbonSubmissionReviewedBy")
+  // Best-effort, updated on each authenticated request (see requireAuth) —
+  // "online" is computed as lastSeenAt within the last few minutes, not a
+  // real session/presence system. See DEC-026.
+  lastSeenAt                 DateTime?
+  createdAt                  DateTime           @default(now())
+  updatedAt                  DateTime           @updatedAt
+}
+
+// Audit trail for the Activity Log menu (super admin + Operational Manager
+// only — see DEC-026). userId is nullable (SetNull) so a log entry survives
+// its actor being deleted later; userName is snapshotted at write time for
+// the same reason (a deleted user's name would otherwise be lost).
+model ActivityLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userName    String
+  action      String
+  entityType  String
+  entityId    String?
+  description String
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+enum AttachmentKind {
+  FILE
+  LINK
+}
+
+// Attached to a Task, a ProjectDocument checklist item, or a MaterialRequest
+// — either an uploaded file (written to disk under ATTACHMENT_BASE_PATH,
+// served via GET /api/files/:id — DEC-064) or an external link
+// (e.g. a Drive/Figma URL). Exactly one of taskId/documentId/
+// materialRequestId is set per row.
+//
+// New FILE attachments write to disk and store the path in diskPath;
+// legacy dataUrl records (pre-DEC-064) continue to work for read/download.
+model Attachment {
+  id       String         @id @default(cuid())
+  kind     AttachmentKind @default(FILE)
+  fileName String
+  mimeType String         @default("")
+  fileSize Int            @default(0)
+  dataUrl  String?        @db.Text // legacy base64 — pre-DEC-064; kept for read compat
+  url      String?        @db.Text
+  // DEC-064: absolute path on disk. When set, GET /api/files/:id streams it.
+  // Only set for new uploads; legacy dataUrl records use the dataUrl field.
+  diskPath String?        @db.Text
+
+  uploadedByUserId String
+  uploadedByUser   User   @relation("AttachmentUploadedBy", fields: [uploadedByUserId], references: [id])
+
+  taskId String?
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  documentId String?
+  document   ProjectDocument? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  materialRequestId String?
+  materialRequest   MaterialRequest? @relation(fields: [materialRequestId], references: [id], onDelete: Cascade)
+
+  // Daily-report attachment — see DEC-060. Same shape as task/doc/MR
+  // attachments (FILE or LINK, base64 dataUrl OR external url). At
+  // most one of taskId/documentId/materialRequestId/dailyReportId/
+  // sopId/workflowId is set per row; the per-route code enforces this.
+  dailyReportId String?
+  dailyReport   DailyReport? @relation(fields: [dailyReportId], references: [id], onDelete: Cascade)
+
+  // DEC-066: SOP attachment — the original SOP document (PDF/DOCX/etc.)
+  // uploaded to a SOP entry on the organization page. Same shape as
+  // the other Attachment relations; route enforces at most one sopId
+  // is set per row.
+  sopId String?
+  sop   SOP?   @relation(fields: [sopId], references: [id], onDelete: Cascade)
+
+  // DEC-066: Workflow attachment — illustrative file (diagram, template)
+  // attached to a workflow entry on the organization page.
+  workflowId String?
+  workflow   Workflow? @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+// Stages follow assets/template/doc/Vortec_Operation_Production_Process.pdf,
+// compressed from its per-swimlane steps into project-list-friendly phases.
+enum ProjectStage {
+  INITIATION // Project Insight/Initial Alignment, Gate 0
+  REQUIREMENT // Requirement Gathering, PRD, PRD Approval
+  DESIGN // Engineering Breakdown, Mechanical/Electrical/Software Design, Design Review
+  PROCUREMENT // BOM Released, Purchasing / Material Readiness
+  FABRICATION // Mechanical/Electrical Fabrication, Software Development, Assembling, Bring-up
+  TESTING // Functional/Verification Test, Field Validation, Product Valid
+  FINAL_REVIEW // Final Release Package, Final Approval
+  RELEASED // Product Release
+  PACKAGING // Packing + item-completeness check, then warehouse-in before client delivery (END)
+  ON_HOLD // Gate 0 Hold
+  REJECTED // Gate 0 Reject
+}
+
+model Project {
+  id               String            @id @default(cuid())
+  name             String
+  clientName       String            @default("")
+  problemStatement String            @default("")
+  targetProduct    String            @default("")
+  budget           String            @default("")
+  startDate        DateTime?
+  targetDate       DateTime?
+  stage            ProjectStage      @default(INITIATION)
+  picUserId        String?
+  picUser          User?             @relation(fields: [picUserId], references: [id], onDelete: SetNull)
+  documents        ProjectDocument[]
+  tasks            Task[]
+  materialRequests MaterialRequest[]
+  bomItems         BomItem[]
+  notifications    Notification[]
+  // DEC-067: Open/Close BOM. While `bomClosed = false` (default), the
+  // owning engineering roles can still submit / update items as usual.
+  // Once `bomClosed = true`, POST /api/bom is rejected with 400 for
+  // this project — no new submissions allowed. Closing also generates
+  // one Excel rekap per non-empty BomType and attaches it to the
+  // matching ProjectDocument (auto-checking the doc's done flag).
+  // See POST /api/projects/:id/bom/close in routes/projects.ts.
+  bomClosed        Boolean           @default(false)
+  bomClosedAt      DateTime?
+  bomClosedByUserId String?
+  bomClosedByUser  User?             @relation("ProjectBomClosedBy", fields: [bomClosedByUserId], references: [id], onDelete: SetNull)
+  // DEC-068: Lock/Unlock MaterialRequest submissions. While
+  // `materialRequestLocked = false` (default), engineering roles can
+  // submit MaterialRequests (Pengajuan Bahan Baku). While `true`,
+  // POST /api/projects/:id/material-requests is rejected with 400.
+  // PM/OM toggle this via POST /api/projects/:id/material-requests/lock
+  // (no verification — it's a soft toggle, reversible any time).
+  materialRequestLocked       Boolean   @default(false)
+  materialRequestLockedAt     DateTime?
+  materialRequestLockedByUserId String?
+  materialRequestLockedByUser User?     @relation("ProjectMaterialRequestLockedBy", fields: [materialRequestLockedByUserId], references: [id], onDelete: SetNull)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+// A library of downloadable document templates (PRD, MBOM, CAD, etc.),
+// separate from any specific project — see DEC-034. Super admin/Operational
+// Manager CRUD; every other authenticated role can view and download.
+model DocumentTemplate {
+  id          String         @id @default(cuid())
+  name        String
+  description String         @default("")
+  kind        AttachmentKind @default(FILE)
+  fileName    String
+  mimeType    String         @default("")
+  fileSize    Int            @default(0)
+  dataUrl     String?        @db.Text
+  url         String?        @db.Text
+
+  createdByUserId String
+  createdByUser   User   @relation("DocumentTemplateCreatedBy", fields: [createdByUserId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// DEC-063: persistent notifications. Written by the BOM routes
+// (and any future state-change surface) so a user logging in
+// tomorrow still sees what happened today. The recipient is
+// computed at write time per the "role yang terhubung" rule —
+// the submitter + PM + OM + Purchasing, scoped per event.
+model Notification {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation("NotificationUser", fields: [userId], references: [id], onDelete: Cascade)
+  // Stable event key, e.g. "bom.submitted" | "bom.approved" |
+  // "bom.rejected" | "bom.processing" | "bom.arrived". Keeping
+  // a free string here (instead of a Prisma enum) so future
+  // event families don't need a migration.
+  type       String
+  title      String
+  body       String
+  // For deep-linking from the notifications page straight to
+  // the relevant screen (e.g. /projects/<projectId> BOM tab).
+  projectId  String?
+  project    Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  // Generic link to the entity the event is about (BomItem id
+  // today, possibly other entities later).
+  entityType String
+  entityId   String
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId, readAt])
+  @@index([createdAt])
+  @@index([entityType, entityId])
+}
+
+// Checklist seeded from the DOCUMENTS table in
+// Vortec_Operation_Production_Process.pdf — applies to project-based work only.
+//
+// DEC-064 adds a PM/OM approval gate on top of the role's done-checkbox:
+//   - done = false, reviewStatus = PENDING: owning role hasn't claimed it's done yet
+//   - done = true,  reviewStatus = PENDING: role says it's done, waiting PM/OM review
+//   - done = true,  reviewStatus = APPROVED: PM/OM approved
+//   - done = false, reviewStatus = REVISION: PM/OM rejected / sent back for revision
+// Once APPROVED, only PM/OM can change reviewStatus back to REVISION.
+model ProjectDocument {
+  id          String       @id @default(cuid())
+  name        String
+  team        String
+  // DEC-065: workflow stage this document belongs to. Required for new
+  // documents (filterable via the WorkflowDiagram). Nullable on legacy rows
+  // pre-DEC-065 — backfilled by migration 20260914050000.
+  stage       ProjectStage?
+  done        Boolean     @default(false)
+  note        String      @default("")
+  order       Int         @default(0)
+  // DEC-064: PM/OM approval gate
+  reviewStatus DocReviewStatus @default(PENDING)
+  reviewedByUserId String?
+  reviewedByUser   User?     @relation("DocumentReviewedBy", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+  reviewedAt       DateTime?
+  reviewNote       String    @default("")
+  projectId   String
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  attachments Attachment[]
+  createdAt   DateTime     @default(now())
+}
+
+enum DocReviewStatus {
+  PENDING   // not yet reviewed by PM/OM
+  APPROVED  // PM/OM approved
+  REVISION  // PM/OM sent it back for revision
+}
+
+// DEC-064: replaces the single Task.assignedRoleId with a join table,
+// so one task can be assigned to MANY roles simultaneously.
+model TaskRole {
+  id        String   @id @default(cuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  roleId    String
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([taskId, roleId])
+  @@index([taskId])
+  @@index([roleId])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  WAITING_APPROVAL
+  DONE
+  REJECTED
+}
+
+// Task list is seeded per-project from the flowchart steps in
+// Vortec_Operation_Production_Process.pdf, each assigned to the Role that
+// owns that swimlane (e.g. "Mechanical" -> Role "Mechanical Engineer",
+// "BoD" -> Role "Director"). DEC-064 extends this to multiple assigned roles.
+//
+// DEC-064: replaces the single nullable Task.assignedRoleId with a
+// TaskRole join table, so one task can be assigned to MANY roles.
+//
+// requiresApproval marks the flowchart's decision diamonds (Gate 0, PRD
+// Approval, Design Review, Product Valid, Final Approval) — moving one of
+// these to DONE/REJECTED records who acted.
+model Task {
+  id               String       @id @default(cuid())
+  projectId        String
+  project          Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title            String
+  description      String       @default("")
+  // DEC-064: multi-role assignment via TaskRole join table.
+  // The old single assignedRoleId is removed (migrated to TaskRole first).
+  taskRoles        TaskRole[]
+  status           TaskStatus   @default(TODO)
+  // Free-text note that the assigned-role team can write to record
+  // observations, blockers, and updates without bumping status. PM/OM/
+  // Director can also write it. The "target" (start/due date) is
+  // structural and stays PM/OM/Director-only — see DEC-052 extension.
+  note             String       @default("")
+  requiresApproval Boolean      @default(false)
+  // DEC-065: workflow stage this task belongs to. Required for new tasks
+  // (filterable via the WorkflowDiagram). Nullable on legacy rows pre-DEC-065
+  // — backfilled by migration 20260914050000.
+  stage          ProjectStage?
+  approvedByUserId String?
+  approvedByUser   User?        @relation("TaskApprovedBy", fields: [approvedByUserId], references: [id], onDelete: SetNull)
+  approvedAt       DateTime?
+  order            Int          @default(0)
+  startDate        DateTime?
+  dueDate          DateTime?
+  completedAt      DateTime?
+  attachments      Attachment[]
+  subtasks         Subtask[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+}
+
+// A checklist item under a Task. Whoever holds the Task's assigned role can
+// CRUD subtasks (alongside PM/Operational Manager/super admin, who can also
+// CRUD the Task itself) — see DEC-031. Completing every subtask under a
+// Task can auto-advance the Task's own status (see maybeAutoAdvanceTask in
+// routes/projects.ts) — this is additive, not a replacement for manually
+// changing the Task's status, which the assigned role keeps.
+model Subtask {
+  id        String   @id @default(cuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  title     String
+  done      Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Engineering-team material/BOM submission, following the requested
+// workflow: engineering team submits -> Project Manager reviews/approves ->
+// Purchasing processes the purchase.
+enum MaterialRequestStatus {
+  SUBMITTED // waiting on Project Manager review
+  APPROVED // PM approved, now with Purchasing
+  REJECTED // PM rejected
+  PROCESSING // Purchasing is buying
+  COMPLETED // Purchasing finished procurement
+}
+
+model MaterialRequest {
+  id        String                @id @default(cuid())
+  projectId String
+  project   Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title     String
+  note      String                @default("")
+  status    MaterialRequestStatus @default(SUBMITTED)
+  // DEC-067 MR-side: the user picks the BomType (MBOM/EBOM/SBOM/QBOM)
+  // when submitting; the dropdown is filtered by their roles'
+  // allowedBomTypes. Nullable on legacy rows (pre-DEC-067).
+  bomType   BomType?
+  items     MaterialRequestItem[]
+
+  requestedByUserId String
+  requestedByUser   User   @relation("MaterialRequestRequestedBy", fields: [requestedByUserId], references: [id])
+
+  reviewedByUserId String?
+  reviewedByUser   User?     @relation("MaterialRequestReviewedBy", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+  reviewedAt       DateTime?
+  reviewNote       String    @default("")
+
+  processedByUserId String?
+  processedByUser   User?     @relation("MaterialRequestProcessedBy", fields: [processedByUserId], references: [id], onDelete: SetNull)
+  processedAt       DateTime?
+  purchaseNote      String    @default("")
+
+  attachments Attachment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MaterialRequestItem {
+  id           String          @id @default(cuid())
+  requestId    String
+  request      MaterialRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  materialName String
+  quantity     Float
+  unit         String
+  notes        String          @default("")
+}
+
+// Dedicated BOM (bill of materials) menu — separate from the ad-hoc
+// MaterialRequest flow above. Each item has its OWN lifecycle (not a
+// batch/request-level status) so an engineering team can keep adding new
+// items to a project's BOM at any time: each new item starts its own
+// SUBMITTED -> APPROVED/REJECTED -> PROCESSING -> ARRIVED cycle,
+// independent of items already further along. Once ARRIVED an item is
+// locked (already purchased) — see DEC-035.
+enum BomType {
+  MBOM
+  EBOM
+  SBOM
+  QBOM // Quality BOM — filled in by Quality Control team (DEC-064)
+}
+
+enum BomItemStatus {
+  SUBMITTED // waiting on Project Manager review
+  APPROVED // PM approved, now with Purchasing
+  REJECTED // PM rejected — engineer must submit a new item, not edit this one
+  PROCESSING // Purchasing is buying
+  ARRIVED // Purchasing confirmed delivery — item is locked from here on
+}
+
+model BomItem {
+  id        String        @id @default(cuid())
+  projectId String
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  bomType   BomType
+  name      String
+  quantity  Float
+  unit      String
+  // Price per unit, optional. Used for the dashboard BOM summary
+  // (DEC-062) and so the Purchasing menu can see the budget at a
+  // glance. Null on legacy rows (DEC-062 migration keeps them null
+  // — the dashboard treats null as "not priced").
+  price     Float?
+  notes     String        @default("")
+  status    BomItemStatus @default(SUBMITTED)
+
+  submittedByUserId String
+  submittedByUser   User     @relation("BomItemSubmittedBy", fields: [submittedByUserId], references: [id])
+  submittedAt       DateTime @default(now())
+
+  approvedByUserId String?
+  approvedByUser   User?     @relation("BomItemApprovedBy", fields: [approvedByUserId], references: [id], onDelete: SetNull)
+  approvedAt       DateTime?
+  approveNote      String    @default("")
+
+  processedByUserId   String?
+  processedByUser     User?     @relation("BomItemProcessedBy", fields: [processedByUserId], references: [id], onDelete: SetNull)
+  purchasingUpdatedAt DateTime?
+  purchaseNote        String    @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// --- Operasional menu (non-project daily work) — see DEC-041 ---------------
+// Everyone except Project Manager can access this menu (PM's day-to-day
+// already lives entirely in Projects); Operational Manager/super admin get
+// the monitoring/approval side.
+
+// A free-text log of what a user did on a given day, outside any project.
+// No approval workflow — Operational Manager/super admin just monitor it.
+model DailyReport {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date        DateTime
+  activities  String
+  attachments Attachment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([date])
+}
+
+// Cash advance (kasbon), redesigned per DEC-061. A KasbonPhase is a
+// spending round for a division/month/phase-number, created by the
+// Operational Manager and capped at Rp 5,000,000 total across its
+// submissions. The phase starts OPEN (accepting submissions) and flips
+// to REALIZED automatically when every item in every APPROVED
+// submission has realisation data (link/purchaseDate/receivedDate/
+// photos) filled in. A phase can hold multiple KasbonSubmissions —
+// each is a batch of items sent by the Operational Leader for review.
+// A rejected submission stays visible (read-only) with its review note;
+// the requester must create a new submission to retry, matching the
+// "harus mengajukan pengajuan baru jika di reject" workflow.
+enum KasbonPhaseStatus {
+  OPEN // OM created, accepting submissions
+  REALIZED // every item in every APPROVED submission is fully realised
+}
+
+enum KasbonSubmissionStatus {
+  PENDING // OL submitted, waiting on OM review
+  APPROVED // OM approved, items can now be realised
+  REJECTED // OM rejected, items visible read-only, OL must create a new submission
+}
+
+model KasbonPhase {
+  id          String             @id @default(cuid())
+  division    String
+  period      String // "YYYY-MM", the month this phase belongs to
+  phase       Int                @default(1)
+  status      KasbonPhaseStatus  @default(OPEN)
+  realizedAt  DateTime?
+  submissions KasbonSubmission[]
+
+  createdByUserId String
+  createdByUser   User     @relation("KasbonPhaseCreatedBy", fields: [createdByUserId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // "Only one OPEN phase at a time per (division, period)" — DEC-061.
+  // The previous model also keyed by requestedByUserId, but the new
+  // model has phases created by OM, so the unique key drops the user
+  // dimension. Already-REALIZED phases don't block creation of the next
+  // one (enforced in route code, not the schema).
+  @@unique([division, period, phase])
+  @@index([period])
+  @@index([status])
+}
+
+model KasbonSubmission {
+  id        String                 @id @default(cuid())
+  phaseId   String
+  phase     KasbonPhase            @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  status    KasbonSubmissionStatus @default(PENDING)
+  batchNote String                 @default("")
+
+  submittedByUserId String
+  submittedByUser   User     @relation("KasbonSubmissionSubmittedBy", fields: [submittedByUserId], references: [id])
+  submittedAt       DateTime @default(now())
+
+  reviewedByUserId String?
+  reviewedByUser   User?     @relation("KasbonSubmissionReviewedBy", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+  reviewedAt       DateTime?
+  reviewNote       String    @default("")
+
+  items KasbonItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([phaseId])
+  @@index([status])
+  @@index([submittedByUserId])
+}
+
+// Cost categories from the real spreadsheet's "Biaya" summary table.
+enum KasbonReason {
+  DEVELOPMENT
+  PRODUCTION
+  OPERATION
+  TOOLS_ASSET
+}
+
+// One itemized purchase within a submission. At submission time the OL
+// only fills the minimum (reason/item/qty/unit/price) — link, dates,
+// and the two evidence photos are filled during the "realise" step
+// AFTER the submission is APPROVED. The phase auto-flips to REALIZED
+// when every item in every APPROVED submission has both photos set
+// (the tightest realisation gate — see DEC-061).
+model KasbonItem {
+  id           String           @id @default(cuid())
+  submissionId String
+  submission   KasbonSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  reason       KasbonReason
+  item         String
+  qty          Float
+  unit         String
+  price        Float
+
+  // Realisation data — null until the OL "realises" this item after
+  // the submission is APPROVED. All four must be set for the item to
+  // count as fully realised; the parent phase flips to REALIZED only
+  // when every item in every APPROVED submission meets this bar.
+  link            String    @default("")
+  purchaseDate    DateTime?
+  receivedDate    DateTime?
+  receiptPhotoUrl String?   @db.Text
+  itemPhotoUrl    String?   @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([submissionId])
+}
+
+// DEC-066: Organization Workflow library.
+// A Workflow is a documented reference for "how a particular piece of work
+// flows from start to finish" — e.g. "Change Request handling", "Project
+// kick-off checklist". It is NOT the same as Project.stage (which is the
+// concrete stage of a specific project); the workflow library is the
+// reference teams read to understand the standard process.
+//
+// CRU by OM and super admin; everyone else can read. Same shape and
+// permission as DocumentTemplate (DEC-034).
+model Workflow {
+  id          String   @id @default(cuid())
+  name        String
+  description String   @default("")
+  // Free-text body explaining the workflow steps. Rendered as preformatted
+  // block on the read page; markdown-ish is fine but we don't run a full
+  // markdown pipeline for now — keep it plain-text.
+  steps       String   @default("")
+  // Light grouping so the list page can filter / cluster workflows.
+  // Examples: "Engineering", "Operational", "Quality", "Project Management".
+  category    String   @default("")
+  // Display order inside the list. Manual — admins reorder via the UI.
+  order       Int      @default(0)
+  // Audit trail so we can show "diperbarui oleh X pada Y" on the read page.
+  createdByUserId String
+  createdByUser   User   @relation("WorkflowCreatedBy", fields: [createdByUserId], references: [id])
+  updatedByUserId String?
+  updatedByUser   User?  @relation("WorkflowUpdatedBy", fields: [updatedByUserId], references: [id], onDelete: SetNull)
+  attachments     Attachment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([category, order])
+}
+
+// DEC-066: Standard Operating Procedure (SOP) library.
+// An SOP documents "the official way to perform a specific task or
+// process" — typically a PDF or DOCX uploaded as the authoritative
+// reference. Same permission shape as Workflow (OM/super admin CRU,
+// everyone else read).
+model SOP {
+  id          String   @id @default(cuid())
+  title       String
+  // Short plain-text summary shown in card / list view. The uploaded
+  // PDF/DOCX (attached via Attachment.sopId) is the authoritative copy.
+  summary     String   @default("")
+  // Optional structured content the admin can write alongside the file
+  // (e.g. scope, applicability, related workflow). Plain text.
+  content     String   @default("")
+  category    String   @default("")
+  order       Int      @default(0)
+  createdByUserId String
+  createdByUser   User   @relation("SopCreatedBy", fields: [createdByUserId], references: [id])
+  updatedByUserId String?
+  updatedByUser   User?  @relation("SopUpdatedBy", fields: [updatedByUserId], references: [id], onDelete: SetNull)
+  attachments     Attachment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([category, order])
+}

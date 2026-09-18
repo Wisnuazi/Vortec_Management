@@ -1,0 +1,517 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 960px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+  max-width: 68ch;
+  line-height: 1.6;
+}
+
+.loading,
+.emptyHint {
+  color: var(--color-ink-faint);
+  font-size: 0.86rem;
+}
+
+/* DEC-076: search + filter rows for daily report and kasbon. */
+.filterInput {
+  font-size: 0.88rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  min-width: 220px;
+}
+
+.filterRow {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filterSelect {
+  font-size: 0.84rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  min-width: 140px;
+}
+
+.trigger {
+  align-self: flex-start;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.trigger:hover {
+  background: var(--color-surface-sunken);
+}
+
+.createForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-3);
+}
+
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.formGrid input,
+.formGrid textarea {
+  font-size: 0.88rem;
+  font-weight: 400;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-inter);
+}
+
+.formGrid textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.formActions button {
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.formActions button[type="submit"] {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: transparent;
+}
+
+.formActions button[type="submit"]:hover {
+  background: var(--color-accent-hover);
+}
+
+.formActions button:not([type="submit"]):hover {
+  background: var(--color-surface-sunken);
+}
+
+.formActions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-surface-sunken);
+}
+
+.formActions button:disabled:hover {
+  background: var(--color-surface-sunken);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* --- Daily report attachments ------------------------------------------- */
+
+.attachmentSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+  padding: var(--sp-2) 0;
+  border-top: 1px dashed var(--color-border);
+}
+
+.attachmentLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.attachmentList,
+.pendingFiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.attachmentItem,
+.pendingFiles li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 4px 8px 4px 10px;
+  font-size: 0.85rem;
+}
+
+.fileName {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: var(--color-accent);
+  text-align: left;
+  cursor: pointer;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fileName:hover {
+  text-decoration: underline;
+}
+
+.fileSize {
+  font-size: 0.75rem;
+  color: var(--color-ink-faint);
+}
+
+.removePendingBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-ink-faint);
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0 6px;
+  border-radius: 50%;
+}
+.removePendingBtn:hover {
+  background: var(--color-danger-wash);
+  color: var(--color-danger);
+}
+
+.attachmentActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.uploadBtn,
+.attachmentActions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border-strong);
+  color: var(--color-ink);
+  border-radius: var(--r-md);
+  padding: 4px 10px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.uploadBtn:hover,
+.attachmentActions button:hover {
+  background: var(--color-surface-sunken);
+  border-color: var(--color-accent);
+}
+
+.linkInputRow {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+.linkInputRow input {
+  font-size: 0.82rem;
+  padding: 4px 8px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--r-md);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  min-width: 220px;
+}
+.linkInputRow input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.error {
+  color: var(--color-danger);
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.userTag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+  border-radius: var(--r-full);
+  padding: 0.15rem 0.6rem;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--color-ink);
+  flex: 1;
+}
+
+.amount {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.statusPill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-full);
+  white-space: nowrap;
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+}
+
+.status_DRAFT {
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+}
+
+.status_SUBMITTED {
+  background: var(--color-warning-wash);
+  color: var(--color-warning-ink);
+}
+
+.status_APPROVED {
+  background: var(--color-success-wash);
+  color: var(--color-success-ink);
+}
+
+.status_REJECTED {
+  background: var(--color-danger-wash);
+  color: var(--color-danger-ink);
+}
+
+.hintSmall {
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+}
+
+.notes {
+  font-size: 0.86rem;
+  color: var(--color-ink-muted);
+  white-space: pre-wrap;
+}
+
+.rejectionNotice {
+  font-size: 0.86rem;
+  color: var(--color-danger-ink);
+  background: var(--color-danger-wash);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.itemRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.82rem;
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-md);
+  padding: 0.35rem 0.6rem;
+}
+
+.itemRowSelected {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -1px;
+}
+
+.itemReason {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  background: var(--color-surface);
+  border-radius: var(--r-full);
+  padding: 0.1rem 0.5rem;
+  white-space: nowrap;
+}
+
+.itemName {
+  flex: 1;
+  color: var(--color-ink);
+  min-width: 140px;
+}
+
+.inlineForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.inlineForm input {
+  flex: 1;
+  min-width: 160px;
+  font-size: 0.84rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.inlineForm button {
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.inlineForm button:hover {
+  background: var(--color-surface-sunken);
+}
+
+.inlineForm button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-surface-sunken);
+}
+
+.rejectBtn {
+  border-color: var(--color-danger) !important;
+  color: var(--color-danger-ink) !important;
+}
+
+.rejectBtn:disabled {
+  border-color: var(--color-border-strong) !important;
+  color: var(--color-ink-faint) !important;
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-left: auto;
+}
+
+.editBtn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.editBtn:hover {
+  background: var(--color-surface-sunken);
+}
+
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background: var(--color-danger);
+  color: #fff;
+}

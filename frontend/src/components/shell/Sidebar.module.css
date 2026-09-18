@@ -1,0 +1,220 @@
+.sidebar {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100dvh;
+  overflow-y: auto;
+  background: var(--color-sidebar-bg);
+  padding: var(--sp-6) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-2);
+}
+
+.brand img {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.groupLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--color-sidebar-ink-dim);
+  padding: var(--sp-4) var(--sp-2) var(--sp-1);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  text-decoration: none;
+  color: var(--color-sidebar-ink);
+  font-size: 0.86rem;
+  padding: var(--sp-2);
+  border-radius: var(--r-md);
+  transition:
+    background var(--dur-fast),
+    color var(--dur-fast);
+  border-left: 2px solid transparent;
+  min-height: 2.25rem; /* touch target */
+}
+
+.navLink:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.navLink:focus-visible {
+  outline: 2px solid var(--color-sidebar-active);
+  outline-offset: 2px;
+}
+
+.navLinkActive {
+  /* DEC-072: tone down the active-state red wash. The brand-red left
+     border is enough to communicate "this is where you are"; the
+     red background was too aggressive on a dark sidebar. */
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--color-sidebar-active);
+}
+
+/* === Submenu (nested under /organization) ============================== */
+.submenu {
+  display: flex;
+  flex-direction: column;
+  margin-left: 22px;
+  padding-left: 0;
+  border-left: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.submenuLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px 7px 18px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-sidebar-ink-dim);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  transition: background-color var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+.submenuLink:hover {
+  color: var(--color-sidebar-ink);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.submenuLinkActive {
+  /* DEC-072: same wash tone-down as the parent .navLinkActive so
+     subitems match the brand-soft style. */
+  color: #fff;
+  border-left-color: var(--color-sidebar-active);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.submenuLink:focus-visible {
+  outline: 2px solid var(--color-sidebar-active);
+  outline-offset: 2px;
+}
+
+.submenuDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.dot {
+  /* DEC-072: subtler navigation dot. Was reading as a brand-red bullet
+     when active because the parent navLink turns white-on-red. Now it
+     reads as a low-key marker. */
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+.navBadge {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  background: var(--color-sidebar-active);
+  border-radius: var(--r-full);
+  padding: 0.2rem 0.4rem;
+  min-width: 1.2em;
+  text-align: center;
+}
+
+.bottomSection {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.pending {
+  padding: var(--sp-3);
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: var(--r-md);
+  color: var(--color-sidebar-ink-dim);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+/* --- mobile drawer variant ---------------------------------------------- */
+.closeRow {
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.closeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: transparent;
+  color: var(--color-sidebar-ink);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid var(--color-sidebar-active);
+  outline-offset: 2px;
+}
+
+@media (max-width: 860px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(18rem, 86vw);
+    z-index: 50;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: var(--sh-lg);
+    transform: translateX(-100%);
+    transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .sidebar.mobileOpen {
+    transform: translateX(0);
+  }
+  .closeRow {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
+  }
+}

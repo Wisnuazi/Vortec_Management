@@ -1,0 +1,123 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  font-family: inherit;
+  font-weight: 600;
+  border-radius: var(--r-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  /* Avoid layout shift on press: cap transform to scale, no border change. */
+  transition:
+    background-color var(--dur-fast) ease,
+    color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease,
+    transform var(--dur-fast) ease;
+  user-select: none;
+  white-space: nowrap;
+  /* No focus ring here — globals.css :focus-visible picks it up so we
+     stay consistent across every interactive element. */
+}
+
+.btn:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(0.98);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+/* === Sizes === */
+.s_sm {
+  min-height: 32px;
+  padding: 0 var(--sp-3);
+  font-size: 0.78rem;
+  border-radius: var(--r-sm);
+}
+.s_md {
+  min-height: 44px;
+  padding: 0 var(--sp-4);
+  font-size: 0.86rem;
+}
+.s_lg {
+  min-height: 52px;
+  padding: 0 var(--sp-5);
+  font-size: 0.92rem;
+}
+
+/* === Variants === */
+.v_primary {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-color: transparent;
+}
+.v_primary:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+.v_primary:active:not(:disabled) {
+  background: var(--color-accent-active);
+}
+
+.v_secondary {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-color: var(--color-border-strong);
+}
+.v_secondary:hover:not(:disabled) {
+  background: var(--color-surface-sunken);
+  border-color: var(--color-ink-faint);
+}
+
+.v_ghost {
+  background: transparent;
+  color: var(--color-ink-muted);
+  border-color: transparent;
+}
+.v_ghost:hover:not(:disabled) {
+  background: var(--color-surface-sunken);
+  color: var(--color-ink);
+}
+
+.v_danger {
+  background: transparent;
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+.v_danger:hover:not(:disabled) {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* === Loading spinner (replaces icon during async ops) === */
+.loading {
+  cursor: progress;
+}
+.spinner {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: btnSpin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes btnSpin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; border-top-color: currentColor; opacity: 0.5; }
+}

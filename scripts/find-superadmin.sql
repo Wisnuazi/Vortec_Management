@@ -1,0 +1,1 @@
+SELECT email, name FROM "User" WHERE "isSuperAdmin" = true LIMIT 5;

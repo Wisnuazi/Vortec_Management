@@ -1,0 +1,472 @@
+/* ============ VORTEC DESIGN TOKENS ============
+   Source of truth: Vortec Design System artifact.
+   Keep this file in sync with that spec — do not hardcode
+   raw hex values in components, reference these variables. */
+:root {
+  /* primitive — brand red ramp */
+  --red-50: #fff0f0;
+  --red-100: #ffdbdb;
+  --red-200: #ffb8b8;
+  --red-300: #ff8585;
+  --red-400: #ff4242;
+  --red-500: #ff0000;
+  --red-600: #df0000;
+  --red-700: #b80000;
+  --red-800: #8f0000;
+  --red-900: #660000;
+  --red-950: #3d0000;
+
+  /* primitive — warm neutral ramp */
+  --neu-0: #ffffff;
+  --neu-25: #fcfbfa;
+  --neu-50: #faf8f7;
+  --neu-100: #f2efec;
+  --neu-150: #e7e2de;
+  --neu-200: #dad3cd;
+  --neu-300: #c2b8b0;
+  --neu-400: #9c8f86;
+  --neu-500: #786d66;
+  --neu-600: #5b524c;
+  --neu-700: #413a36;
+  --neu-800: #2a2523;
+  --neu-850: #1f1b19;
+  --neu-900: #171413;
+  --neu-950: #0e0c0b;
+
+  /* primitive — semantic hues (distinct from brand accent) */
+  --green-500: #1e8e5a;
+  --green-600: #166e46;
+  --green-100: #dff3e9;
+  --amber-500: #b36b00;
+  --amber-600: #8f5600;
+  --amber-100: #fbebd3;
+  --blue-500: #2f6fed;
+  --blue-600: #1e56c7;
+  --blue-100: #e1e9fd;
+  --purple-500: #7c3aed;
+  --purple-600: #6d28d9;
+  --purple-100: #ede9fe;
+
+  /* primitive — scales */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-full: 999px;
+  --sh-sm: 0 1px 2px rgba(23, 20, 19, 0.06);
+  --sh-md: 0 4px 12px rgba(23, 20, 19, 0.08);
+  --sh-lg: 0 12px 32px rgba(23, 20, 19, 0.14);
+  --dur-fast: 120ms;
+  --dur-normal: 180ms;
+
+  /* semantic — light theme */
+  --color-bg: var(--neu-25);
+  --color-surface: var(--neu-0);
+  --color-surface-sunken: var(--neu-50);
+  --color-border: var(--neu-150);
+  --color-border-strong: var(--neu-300);
+  --color-ink: var(--neu-900);
+  --color-ink-muted: var(--neu-600);
+  /* DEC-069: bumped from --neu-400 (3.04:1 on bg, fails AA) to a darker
+     shade so placeholder / hint text stays >=4.5:1 on the light bg. */
+  --color-ink-faint: #6b625b;
+
+  --color-accent: var(--red-600);
+  --color-accent-hover: var(--red-700);
+  --color-accent-active: var(--red-800);
+  --color-accent-on: #ffffff;
+  --color-accent-wash: var(--red-50);
+  --color-accent-wash-border: var(--red-200);
+
+  --color-success: var(--green-600);
+  --color-success-wash: var(--green-100);
+  --color-success-ink: #0f5333;
+  --color-warning: var(--amber-600);
+  --color-warning-wash: var(--amber-100);
+  --color-warning-ink: #6b3f00;
+  --color-info: var(--blue-600);
+  --color-info-wash: var(--blue-100);
+  --color-info-ink: #173d8f;
+  --color-danger: var(--red-700);
+  --color-danger-wash: var(--red-50);
+  --color-danger-ink: var(--red-800);
+  --color-purple: var(--purple-600);
+  --color-purple-wash: var(--purple-100);
+  --color-purple-ink: #4c1d95;
+
+  --color-ring: var(--red-500);
+  --color-sidebar-bg: var(--neu-900);
+  --color-sidebar-ink: var(--neu-200);
+  --color-sidebar-ink-dim: var(--neu-500);
+  --color-sidebar-active: var(--red-600);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: var(--neu-950);
+    --color-surface: var(--neu-900);
+    --color-surface-sunken: var(--neu-850);
+    --color-border: var(--neu-800);
+    --color-border-strong: var(--neu-700);
+    --color-ink: var(--neu-100);
+    --color-ink-muted: var(--neu-400);
+    /* DEC-069: bumped from --neu-500 (~3.5:1 on bg) to --neu-300
+       so placeholder/hint text stays >=4.5:1 on the dark bg. */
+    --color-ink-faint: var(--neu-300);
+
+    --color-accent: var(--red-500);
+    --color-accent-hover: var(--red-400);
+    --color-accent-active: var(--red-300);
+    --color-accent-on: #1a0000;
+    --color-accent-wash: rgba(223, 0, 0, 0.14);
+    --color-accent-wash-border: rgba(223, 0, 0, 0.35);
+
+    --color-success: #3fbf85;
+    --color-success-wash: rgba(30, 142, 90, 0.16);
+    --color-success-ink: #8fe6be;
+    --color-warning: #e5a02e;
+    --color-warning-wash: rgba(179, 107, 0, 0.18);
+    --color-warning-ink: #f3c97b;
+    --color-info: #6e9bff;
+    --color-info-wash: rgba(47, 111, 237, 0.18);
+    --color-info-ink: #afc5ff;
+    --color-danger: #ff6b5b;
+    --color-danger-wash: rgba(184, 0, 0, 0.2);
+    --color-danger-ink: #ffb3a8;
+    --color-purple: #a78bfa;
+    --color-purple-wash: rgba(124, 58, 237, 0.18);
+    --color-purple-ink: #c4b5fd;
+
+    --color-ring: var(--red-400);
+    --color-sidebar-bg: #0b0a09;
+    --color-sidebar-ink: var(--neu-300);
+    --color-sidebar-ink-dim: var(--neu-600);
+    --color-sidebar-active: var(--red-500);
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: var(--neu-950);
+  --color-surface: var(--neu-900);
+  --color-surface-sunken: var(--neu-850);
+  --color-border: var(--neu-800);
+  --color-border-strong: var(--neu-700);
+  --color-ink: var(--neu-100);
+  --color-ink-muted: var(--neu-400);
+  /* DEC-069: bumped from --neu-500 (~3.5:1 on bg) to --neu-300
+     so placeholder/hint text stays >=4.5:1 on the dark bg. */
+  --color-ink-faint: var(--neu-300);
+
+  --color-accent: var(--red-500);
+  --color-accent-hover: var(--red-400);
+  --color-accent-active: var(--red-300);
+  --color-accent-on: #1a0000;
+  --color-accent-wash: rgba(223, 0, 0, 0.14);
+  --color-accent-wash-border: rgba(223, 0, 0, 0.35);
+
+  --color-success: #3fbf85;
+  --color-success-wash: rgba(30, 142, 90, 0.16);
+  --color-success-ink: #8fe6be;
+  --color-warning: #e5a02e;
+  --color-warning-wash: rgba(179, 107, 0, 0.18);
+  --color-warning-ink: #f3c97b;
+  --color-info: #6e9bff;
+  --color-info-wash: rgba(47, 111, 237, 0.18);
+  --color-info-ink: #afc5ff;
+  --color-danger: #ff6b5b;
+  --color-danger-wash: rgba(184, 0, 0, 0.2);
+  --color-danger-ink: #ffb3a8;
+  --color-purple: #a78bfa;
+  --color-purple-wash: rgba(124, 58, 237, 0.18);
+  --color-purple-ink: #c4b5fd;
+
+  --color-ring: var(--red-400);
+  --color-sidebar-bg: #0b0a09;
+  --color-sidebar-ink: var(--neu-300);
+  --color-sidebar-ink-dim: var(--neu-600);
+  --color-sidebar-active: var(--red-500);
+}
+
+/* ============ BASE ============ */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  /* 16px baseline avoids iOS auto-zoom on input focus. */
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  max-width: 100vw;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 1.5 line-height for body — readable without being airy. */
+  line-height: 1.5;
+}
+
+/* === DEC-069: ui-ux-pro-max reworks ===
+   High-impact cross-page improvements:
+   1. Global focus-visible ring (every interactive element)
+   2. Reduced-motion override
+   3. Touch-target minimum (44px) on buttons + inputs
+   4. Disabled-state polish
+   5. Form input base (consistent typography + padding)
+   6. Selection / scrollbar / placeholder tone-down
+   These live in :root so every page inherits the fix without each
+   CSS module having to repeat it. */
+
+/* Visible only on keyboard nav — keeps the UI clean for mouse users
+   while staying accessible. WCAG 2.2 AA focus-appearance. */
+:where(a, button, [role="button"], input, select, textarea, summary, [tabindex]):focus {
+  outline: none;
+}
+:where(a, button, [role="button"], input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* Honor the user's OS-level reduced-motion preference. Animations
+   collapse to instant; scroll-behavior switches to auto so anchor
+   jumps still work. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Min 44px touch target — opt-in via `.tap-target` so we don't
+   break existing small icon buttons (close X, trash, edit pencil).
+   Apply on the wrapper component CSS when a button is text-bearing. */
+.tap-target {
+  min-height: 44px;
+}
+
+/* Press feedback + cursor polish — applies to any <button>-like
+   control by default. CSS modules can override per-component. */
+:where(button, [role="button"], a.button, .button) {
+  transition: background-color var(--dur-fast) var(--dur-normal, 180ms) ease,
+              border-color var(--dur-fast) var(--dur-normal, 180ms) ease,
+              color var(--dur-fast) var(--dur-normal, 180ms) ease,
+              transform var(--dur-fast) ease;
+  cursor: pointer;
+}
+
+:where(button, [role="button"], a.button, .button):active:not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(0.98);
+}
+
+:where(button, [role="button"], a.button, .button):disabled,
+:where(button, [role="button"], a.button, .button)[aria-disabled="true"] {
+  /* Material spec: disabled = 0.38 opacity, not-allowed cursor, no
+     hover state. We use 0.5 because our accent surfaces are already
+     colored; a heavier fade is needed to read as off. */
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Form input base — every <input>/<textarea>/<select> gets a
+   consistent treatment unless a CSS module overrides. Touch target
+   (44px) included. */
+:where(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  min-height: 44px;
+  font: inherit;
+  color: var(--color-ink);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--r-md);
+  padding: 0 var(--sp-3);
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+
+:where(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="range"]):hover:not(:disabled) {
+  border-color: var(--color-ink-faint);
+}
+
+:where(input, textarea, select):not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus-visible {
+  outline: none;
+  border-color: var(--color-ring);
+  box-shadow: 0 0 0 3px var(--color-accent-wash-border);
+}
+
+:where(input, textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  /* Wrap long user input cleanly. */
+  word-break: break-word;
+}
+
+/* Placeholder tone is darker than --color-ink-faint so it's still
+   readable. */
+:where(input, textarea)::placeholder,
+:where(input, textarea):placeholder-shown {
+  color: var(--color-ink-muted);
+  opacity: 1;
+}
+
+/* Scrollbar — subtle in both themes so the right rail doesn't
+   compete with the content. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--r-full);
+  border: 2px solid var(--color-bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), system-ui, sans-serif;
+  text-wrap: balance;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+code,
+.mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-accent-wash-border);
+  color: var(--color-ink);
+}
+
+/* Skip-link target — keyboard users jump straight to main content
+   on any page. Activated via the .skip-link rule in AppShell. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============ DEC-069: SHARED TAB STRIP ============
+   Single source of truth for the pill-style tab strip used on
+   /projects, /purchasing, /operational, /organization, and
+   /notifications. Replaces 5 copies of the same .tabs/.tab/.tabActive
+   CSS module rules.
+
+   Usage:
+     <div className="tabs" role="tablist">
+       <button className="tab tabActive" role="tab" aria-selected="true">…</button>
+       <button className="tab" role="tab" aria-selected="false">…</button>
+     </div> */
+.tabs {
+  display: inline-flex;
+  gap: 2px;
+  background: var(--color-surface-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-md);
+  padding: 2px;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+
+.tab:hover {
+  color: var(--color-ink);
+}
+
+.tabActive {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--sh-sm);
+}
+
+/* Count pill rendered inside a .tab button (used on tabs that show
+   a pending/unread count next to the label). */
+.tabBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.05rem 0.45rem;
+  border-radius: var(--r-full);
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
+}
+
+/* ============ DEC-069: SHARED .card ============
+   Standardized content card. Replaces 10+ identical .card definitions
+   scattered across page.module.css files. Pages can opt-in by using
+   `className="card"` instead of `className={styles.card}`.
+
+   The visual is the canonical Vortec surface card: subtle border,
+   r-lg radius, sp-5 padding, flex column with sp-4 gap. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+}

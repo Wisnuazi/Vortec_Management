@@ -1,0 +1,929 @@
+// --- Kasbon (DEC-061: phase + multi-submission) -----------------------------
+// UI mirrors the new model: a phase (OPEN/REALIZED) holds submissions
+// (PENDING/APPROVED/REJECTED). OL creates submissions + realises items;
+// OM reviews + opens new phases. Rejected submissions stay visible as a
+// read-only audit trail.
+
+const PHASE_STATUS_PILL: Record<KasbonPhaseStatus, string> = {
+  OPEN: "status_OPEN",
+  REALIZED: "status_REALIZED",
+};
+const SUBMISSION_STATUS_PILL: Record<KasbonSubmissionStatus, string> = {
+  PENDING: "status_SUBMITTED",
+  APPROVED: "status_APPROVED",
+  REJECTED: "status_REJECTED",
+};
+
+function RealizeItemForm({
+  item,
+  onRealize,
+  onCancel,
+}: {
+  item: ApiKasbonItem;
+  onRealize: (data: RealizeKasbonItemData) => Promise<void>;
+  onCancel: () => void;
+}) {
+  const { t } = usePreferences();
+  const toast = useToast();
+  const [link, setLink] = useState(item.link ?? "");
+  const [purchaseDate, setPurchaseDate] = useState(item.purchaseDate ? item.purchaseDate.slice(0, 10) : "");
+  const [receivedDate, setReceivedDate] = useState(item.receivedDate ? item.receivedDate.slice(0, 10) : "");
+  const [receipt, setReceipt] = useState<string | null>(item.receiptPhotoUrl);
+  const [photo, setPhoto] = useState<string | null>(item.itemPhotoUrl);
+  const [busy, setBusy] = useState(false);
+
+  const onPickReceipt = async (file: File) => {
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      if (dataUrl.length > MAX_PHOTO_BYTES * 2) throw new Error("too large");
+      setReceipt(dataUrl);
+    } catch {
+      toast.error(t("operational.itemPhotoEvidence"), t("operational.itemPhotoTooLarge"));
+    }
+  };
+  const onPickPhoto = async (file: File) => {
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      if (dataUrl.length > MAX_PHOTO_BYTES * 2) throw new Error("too large");
+      setPhoto(dataUrl);
+    } catch {
+      toast.error(t("operational.itemPhotoEvidence"), t("operational.itemPhotoTooLarge"));
+    }
+  };
+
+  return (
+    <form
+      className={styles.createForm}
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (!link.trim() || !purchaseDate || !receivedDate || !receipt || !photo) {
+          toast.error(t("operational.realizeItemTitle"), t("operational.realizeItemHint"));
+          return;
+        }
+        setBusy(true);
+        try {
+          await onRealize({
+            link: link.trim(),
+            purchaseDate: purchaseDate || null,
+            receivedDate: receivedDate || null,
+            receiptPhotoUrl: receipt,
+            itemPhotoUrl: photo,
+          });
+        } finally {
+          setBusy(false);
+        }
+      }}
+    >
+      <p className={styles.hintSmall}>{t("operational.realizeItemHint")}</p>
+      <div className={styles.formGrid}>
+        <label>
+          <span>{t("operational.itemLink")}</span>
+          <input
+            required
+            type="url"
+            placeholder="https://..."
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+          />
+        </label>
+        <label>
+          <span>Purchase Date</span>
+          <input required type="date" value={purchaseDate} onChange={(e) => setPurchaseDate(e.target.value)} />
+        </label>
+        <label>
+          <span>Received Date</span>
+          <input required type="date" value={receivedDate} onChange={(e) => setReceivedDate(e.target.value)} />
+        </label>
+        <label>
+          <span>{t("operational.itemReceiptPhoto")}</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              e.target.value = "";
+              if (f) onPickReceipt(f);
+            }}
+          />
+          {receipt ? <span className={styles.hintSmall}>✓</span> : null}
+        </label>
+        <label>
+          <span>{t("operational.itemPhotoEvidence")}</span>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              e.target.value = "";
+              if (f) onPickPhoto(f);
+            }}
+          />
+          {photo ? <span className={styles.hintSmall}>✓</span> : null}
+        </label>
+      </div>
+      <div className={styles.formActions}>
+        <button type="submit" disabled={busy} aria-busy={busy}>
+          {busy ? t("common.saving") : t("common.save")}
+        </button>
+        <button type="button" onClick={onCancel}>
+          {t("common.cancel")}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function ItemAddForm({
+  onAddItem,
+  onCancel,
+}: {
+  onAddItem: (data: NewKasbonItemData) => Promise<void>;
+  onCancel: () => void;
+}) {
+  const { t } = usePreferences();
+  const [reason, setReason] = useState<KasbonReason>("DEVELOPMENT");
+  const [item, setItem] = useState("");
+  const [qty, setQty] = useState("1");
+  const [unit, setUnit] = useState("");
+  const [price, setPrice] = useState("");
+  return (
+    <form
+      className={styles.createForm}
+      onSubmit={async (e) => {
+        e.preventDefault();
+        const q = Number(qty);
+        const p = Number(price);
+        if (!item.trim() || !q || q <= 0 || !unit.trim() || p < 0) return;
+        await onAddItem({ reason, item: item.trim(), qty: q, unit: unit.trim(), price: p });
+        setItem("");
+        setQty("1");
+        setUnit("");
+        setPrice("");
+      }}
+    >
+      <p className={styles.hintSmall}>{t("operational.submissionNewHint")}</p>
+      <div className={styles.formGrid}>
+        <label>
+          <span>{t("operational.itemReason")}</span>
+          <select value={reason} onChange={(e) => setReason(e.target.value as KasbonReason)}>
+            {KASBON_REASONS.map((r) => (
+              <option key={r} value={r}>
+                {reasonLabel(t, r)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>{t("operational.itemName")}</span>
+          <input required value={item} onChange={(e) => setItem(e.target.value)} />
+        </label>
+        <label>
+          <span>{t("operational.itemQty")}</span>
+          <input required type="number" min={0.001} step="any" value={qty} onChange={(e) => setQty(e.target.value)} />
+        </label>
+        <label>
+          <span>{t("operational.itemUnit")}</span>
+          <input required value={unit} onChange={(e) => setUnit(e.target.value)} />
+        </label>
+        <label>
+          <span>{t("operational.itemPrice")}</span>
+          <input required type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} />
+        </label>
+      </div>
+      <div className={styles.formActions}>
+        <button type="submit">{t("operational.itemAdd")}</button>
+        <button type="button" onClick={onCancel}>
+          {t("common.cancel")}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function SubmissionCard({
+  submission,
+  phase,
+  isOwner,
+  canReview,
+  onAddItem,
+  onUpdateItem,
+  onRemoveItem,
+  onRealizeItem,
+  onSubmitSubmission,
+  onReviewSubmission,
+  onDownloadSubmission,
+  busy,
+}: {
+  submission: ApiKasbonSubmission;
+  phase: ApiKasbonPhase;
+  isOwner: boolean;
+  canReview: boolean;
+  onAddItem: (submissionId: string, data: NewKasbonItemData) => Promise<void>;
+  onUpdateItem: (itemId: string, data: Partial<NewKasbonItemData>) => Promise<void>;
+  onRemoveItem: (itemId: string) => Promise<void>;
+  onRealizeItem: (itemId: string, data: RealizeKasbonItemData) => Promise<void>;
+  onSubmitSubmission: (submissionId: string) => Promise<void>;
+  onReviewSubmission: (submissionId: string, decision: "APPROVED" | "REJECTED", reviewNote: string) => Promise<void>;
+  onDownloadSubmission: (submissionId: string, filenameHint: string) => Promise<void>;
+  busy: boolean;
+}) {
+  const { t, locale } = usePreferences();
+  const [showAddItem, setShowAddItem] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
+  const [reviewNote, setReviewNote] = useState("");
+  const [realizingItemId, setRealizingItemId] = useState<string | null>(null);
+
+  const showAdd = isOwner && submission.status === "PENDING";
+  const canSubmit = isOwner && submission.status === "PENDING" && submission.items.length > 0;
+  const showReview = canReview && submission.status === "PENDING";
+  const showRealize = isOwner && submission.status === "APPROVED";
+  const showDownload = submission.status === "APPROVED";
+
+  return (
+    <div className={styles.card}>
+      <div className={styles.cardHead}>
+        <span className={styles.userTag}>{submission.submittedByUserName}</span>
+        <span
+          className={`${styles.statusPill} ${styles[SUBMISSION_STATUS_PILL[submission.status]] ?? ""}`}
+        >
+          {submissionStatusLabel(t, submission.status)}
+        </span>
+        <span className={styles.hintSmall}>
+          {rupiah(submission.total, locale)}
+        </span>
+        {showDownload ? (
+          <button
+            type="button"
+            className={styles.downloadBtn}
+            onClick={() =>
+              onDownloadSubmission(
+                submission.id,
+                `Rekap Realisasi Kasbon ${phase.division} ${phase.period} Phase ${phase.phase}.xlsx`
+              )
+            }
+            disabled={busy}
+          >
+            <DownloadIcon /> {t("operational.exportSubmission")}
+          </button>
+        ) : null}
+      </div>
+
+      {submission.batchNote ? <p className={styles.notes}>{submission.batchNote}</p> : null}
+
+      {submission.reviewedByUserName && submission.reviewNote ? (
+        <p className={styles.hintSmall}>
+          <strong>{t("operational.submissionReviewed")} {submission.reviewedByUserName}</strong>
+          {submission.reviewedAt ? ` · ${formatDate(submission.reviewedAt, locale)}` : ""}
+          {` — "${submission.reviewNote}"`}
+        </p>
+      ) : null}
+
+      {submission.status === "REJECTED" ? (
+        <p className={styles.warningHint}>{t("operational.submissionRejected")}</p>
+      ) : null}
+
+      {submission.items.length === 0 ? (
+        <p className={styles.emptyHint}>{t("operational.phaseNoItems")}</p>
+      ) : (
+        <table className={styles.itemTable}>
+          <thead>
+            <tr>
+              <th>{t("operational.itemReason")}</th>
+              <th>{t("operational.itemName")}</th>
+              <th>{t("operational.itemQty")}</th>
+              <th>{t("operational.itemUnit")}</th>
+              <th>{t("operational.itemPrice")}</th>
+              <th>{t("operational.itemLink")}</th>
+              <th>Realisasi</th>
+              {isOwner && submission.status === "PENDING" ? <th></th> : null}
+              {isOwner && submission.status === "APPROVED" ? <th></th> : null}
+            </tr>
+          </thead>
+          <tbody>
+            {submission.items.map((it) => (
+              <ItemRow
+                key={it.id}
+                item={it}
+                isOwner={isOwner}
+                submissionStatus={submission.status}
+                realizingItemId={realizingItemId}
+                setRealizingItemId={setRealizingItemId}
+                onUpdateItem={onUpdateItem}
+                onRemoveItem={onRemoveItem}
+                onRealizeItem={onRealizeItem}
+              />
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {realizingItemId ? (
+        <RealizeItemForm
+          item={submission.items.find((i) => i.id === realizingItemId)!}
+          onCancel={() => setRealizingItemId(null)}
+          onRealize={async (data) => {
+            await onRealizeItem(realizingItemId, data);
+            setRealizingItemId(null);
+          }}
+        />
+      ) : null}
+
+      {showAdd && !showAddItem ? (
+        <button
+          type="button"
+          className={styles.trigger}
+          onClick={() => setShowAddItem(true)}
+        >
+          + {t("operational.itemAdd")}
+        </button>
+      ) : null}
+      {showAdd && showAddItem ? (
+        <ItemAddForm
+          onCancel={() => setShowAddItem(false)}
+          onAddItem={async (data) => {
+            await onAddItem(submission.id, data);
+          }}
+        />
+      ) : null}
+
+      {canSubmit ? (
+        <button
+          type="button"
+          className={styles.primaryAction}
+          onClick={() => onSubmitSubmission(submission.id)}
+        >
+          {t("operational.submissionSubmit")}
+        </button>
+      ) : null}
+
+      {showReview && !reviewing ? (
+        <button type="button" className={styles.trigger} onClick={() => setReviewing(true)}>
+          {t("operational.kasbonApprove")} / {t("operational.kasbonReject")}
+        </button>
+      ) : null}
+      {showReview && reviewing ? (
+        <ReviewForm
+          onCancel={() => setReviewing(false)}
+          onSubmit={async (decision, note) => {
+            await onReviewSubmission(submission.id, decision, note);
+            setReviewing(false);
+          }}
+        />
+      ) : null}
+
+      {isOwner && submission.status === "PENDING" && submission.items.length === 0 ? (
+        <p className={styles.hintSmall}>{t("operational.submissionEmpty")}</p>
+      ) : null}
+    </div>
+  );
+}
+
+function ReviewForm({
+  onCancel,
+  onSubmit,
+}: {
+  onCancel: () => void;
+  onSubmit: (decision: "APPROVED" | "REJECTED", reviewNote: string) => Promise<void>;
+}) {
+  const { t } = usePreferences();
+  const [decision, setDecision] = useState<"APPROVED" | "REJECTED">("APPROVED");
+  const [note, setNote] = useState("");
+  const canSubmit = decision === "APPROVED" || note.trim().length > 0;
+  return (
+    <form
+      className={styles.inlineForm}
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (!canSubmit) return;
+        await onSubmit(decision, note);
+      }}
+    >
+      <select value={decision} onChange={(e) => setDecision(e.target.value as "APPROVED" | "REJECTED")}>
+        <option value="APPROVED">{t("operational.kasbonApprove")}</option>
+        <option value="REJECTED">{t("operational.kasbonReject")}</option>
+      </select>
+      <input
+        required={decision === "REJECTED"}
+        placeholder={t("operational.kasbonReviewNotePlaceholder")}
+        value={note}
+        onChange={(e) => setNote(e.target.value)}
+      />
+      <button type="submit" disabled={!canSubmit}>
+        {decision === "APPROVED" ? t("operational.kasbonApprove") : t("operational.kasbonReject")}
+      </button>
+      <button type="button" onClick={onCancel}>
+        {t("common.cancel")}
+      </button>
+    </form>
+  );
+}
+
+function ItemRow({
+  item,
+  isOwner,
+  submissionStatus,
+  realizingItemId,
+  setRealizingItemId,
+  onUpdateItem,
+  onRemoveItem,
+  onRealizeItem,
+}: {
+  item: ApiKasbonItem;
+  isOwner: boolean;
+  submissionStatus: KasbonSubmissionStatus;
+  realizingItemId: string | null;
+  setRealizingItemId: (id: string | null) => void;
+  onUpdateItem: (itemId: string, data: Partial<NewKasbonItemData>) => Promise<void>;
+  onRemoveItem: (itemId: string) => Promise<void>;
+  onRealizeItem: (itemId: string, data: RealizeKasbonItemData) => Promise<void>;
+}) {
+  const { t, locale } = usePreferences();
+  const [editing, setEditing] = useState(false);
+  const [reason, setReason] = useState<KasbonReason>(item.reason);
+  const [name, setName] = useState(item.item);
+  const [qty, setQty] = useState(String(item.qty));
+  const [unit, setUnit] = useState(item.unit);
+  const [price, setPrice] = useState(String(item.price));
+
+  if (realizingItemId === item.id) return null;
+
+  return (
+    <tr>
+      <td>{reasonLabel(t, item.reason)}</td>
+      <td>
+        {editing ? (
+          <input value={name} onChange={(e) => setName(e.target.value)} />
+        ) : (
+          item.item
+        )}
+      </td>
+      <td>
+        {editing ? (
+          <input type="number" min={0.001} step="any" value={qty} onChange={(e) => setQty(e.target.value)} />
+        ) : (
+          item.qty
+        )}
+      </td>
+      <td>
+        {editing ? (
+          <input value={unit} onChange={(e) => setUnit(e.target.value)} />
+        ) : (
+          item.unit
+        )}
+      </td>
+      <td>
+        {editing ? (
+          <input type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} />
+        ) : (
+          rupiah(item.price, locale)
+        )}
+      </td>
+      <td>
+        {item.link ? (
+          <a href={item.link} target="_blank" rel="noopener noreferrer">
+            {item.link.length > 32 ? `${item.link.slice(0, 32)}…` : item.link}
+          </a>
+        ) : (
+          "—"
+        )}
+      </td>
+      <td>
+        {submissionStatus === "APPROVED" ? (
+          item.realized ? (
+            <span className={styles.statusPill} style={{ background: "var(--color-success-wash)" }}>
+              {t("operational.itemRealized")}
+            </span>
+          ) : (
+            <span className={styles.statusPill} style={{ background: "var(--color-warning-wash)" }}>
+              {t("operational.itemNotRealized")}
+            </span>
+          )
+        ) : (
+          "—"
+        )}
+      </td>
+      {isOwner && submissionStatus === "PENDING" ? (
+        <td>
+          {editing ? (
+            <>
+              <select value={reason} onChange={(e) => setReason(e.target.value as KasbonReason)}>
+                {KASBON_REASONS.map((r) => (
+                  <option key={r} value={r}>
+                    {reasonLabel(t, r)}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={async () => {
+                  await onUpdateItem(item.id, {
+                    reason,
+                    item: name.trim(),
+                    qty: Number(qty) || item.qty,
+                    unit: unit.trim(),
+                    price: Number(price) || 0,
+                  });
+                  setEditing(false);
+                }}
+              >
+                {t("common.save")}
+              </button>
+              <button type="button" onClick={() => setEditing(false)}>
+                {t("common.cancel")}
+              </button>
+            </>
+          ) : (
+            <>
+              <button type="button" onClick={() => setEditing(true)}>
+                {t("assets.edit")}
+              </button>
+              <button
+                type="button"
+                className={styles.deleteBtn}
+                aria-label={`${t("operational.itemRemove")} ${item.item}`}
+                onClick={() => {
+                  if (window.confirm(`${t("operational.itemRemove")} "${item.item}"?`)) {
+                    onRemoveItem(item.id);
+                  }
+                }}
+              >
+                <TrashIcon />
+              </button>
+            </>
+          )}
+        </td>
+      ) : null}
+      {isOwner && submissionStatus === "APPROVED" && !item.realized ? (
+        <td>
+          <button type="button" onClick={() => setRealizingItemId(item.id)}>
+            {t("operational.realizeItemTitle")}
+          </button>
+        </td>
+      ) : null}
+    </tr>
+  );
+}
+
+function PhaseCard({
+  phase,
+  currentUserId,
+  canReview,
+  onCreateSubmission,
+  onAddItem,
+  onUpdateItem,
+  onRemoveItem,
+  onRealizeItem,
+  onSubmitSubmission,
+  onReviewSubmission,
+  onDownloadSubmission,
+  onRemovePhase,
+  busy,
+}: {
+  phase: ApiKasbonPhase;
+  currentUserId: string;
+  canReview: boolean;
+  onCreateSubmission: (phaseId: string, data: { batchNote?: string }) => Promise<void>;
+  onAddItem: (submissionId: string, data: NewKasbonItemData) => Promise<void>;
+  onUpdateItem: (itemId: string, data: Partial<NewKasbonItemData>) => Promise<void>;
+  onRemoveItem: (itemId: string) => Promise<void>;
+  onRealizeItem: (itemId: string, data: RealizeKasbonItemData) => Promise<void>;
+  onSubmitSubmission: (submissionId: string) => Promise<void>;
+  onReviewSubmission: (submissionId: string, decision: "APPROVED" | "REJECTED", reviewNote: string) => Promise<void>;
+  onDownloadSubmission: (submissionId: string, filenameHint: string) => Promise<void>;
+  onRemovePhase: (id: string) => Promise<void>;
+  busy: boolean;
+}) {
+  const { t, locale } = usePreferences();
+  const [creating, setCreating] = useState(false);
+  const [batchNote, setBatchNote] = useState("");
+
+  const myPending = phase.submissions.find(
+    (s) => s.submittedByUserId === currentUserId && s.status === "PENDING"
+  );
+  const canStartNew = phase.status === "OPEN" && !myPending;
+
+  return (
+    <div className={styles.card}>
+      <div className={styles.cardHead}>
+        <h3 className={styles.phaseTitle}>
+          {phase.division} · {phase.period} · Phase {phase.phase}
+        </h3>
+        <span className={`${styles.statusPill} ${styles[PHASE_STATUS_PILL[phase.status]] ?? ""}`}>
+          {phaseStatusLabel(t, phase.status)}
+        </span>
+        <span className={styles.hintSmall}>
+          {t("operational.kasbonAmountLabel")} <strong>{rupiah(phase.total, locale)}</strong>
+        </span>
+        <span className={styles.hintSmall}>
+          {t("operational.kasbonSisa")} <strong>{rupiah(Math.max(phase.remaining, 0), locale)}</strong>
+        </span>
+      </div>
+      <p className={styles.hintSmall}>
+        {t("operational.phaseCreatedBy")} {phase.createdByUserName}
+        {phase.realizedAt ? ` · ${t("operational.phaseRealizedAt")} ${formatDate(phase.realizedAt, locale)}` : ""}
+      </p>
+
+      {phase.submissions.length === 0 ? (
+        <p className={styles.emptyHint}>{t("operational.phaseNoItems")}</p>
+      ) : (
+        <div className={styles.submissionList}>
+          {phase.submissions.map((s) => (
+            <SubmissionCard
+              key={s.id}
+              submission={s}
+              phase={phase}
+              isOwner={s.submittedByUserId === currentUserId}
+              canReview={canReview}
+              onAddItem={onAddItem}
+              onUpdateItem={onUpdateItem}
+              onRemoveItem={onRemoveItem}
+              onRealizeItem={onRealizeItem}
+              onSubmitSubmission={onSubmitSubmission}
+              onReviewSubmission={onReviewSubmission}
+              onDownloadSubmission={onDownloadSubmission}
+              busy={busy}
+            />
+          ))}
+        </div>
+      )}
+
+      {phase.status === "OPEN" && canStartNew && !creating ? (
+        <button type="button" className={styles.primaryAction} onClick={() => setCreating(true)}>
+          + {t("operational.submissionNew")}
+        </button>
+      ) : null}
+      {phase.status === "OPEN" && myPending ? (
+        <p className={styles.hintSmall}>{t("operational.submissionAlreadyPending")}</p>
+      ) : null}
+      {phase.status === "OPEN" && creating ? (
+        <form
+          className={styles.createForm}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await onCreateSubmission(phase.id, { batchNote: batchNote.trim() || undefined });
+            setBatchNote("");
+            setCreating(false);
+          }}
+        >
+          <label>
+            <span>{t("operational.submissionBatchNote")}</span>
+            <input value={batchNote} onChange={(e) => setBatchNote(e.target.value)} />
+          </label>
+          <p className={styles.hintSmall}>{t("operational.submissionNewHint")}</p>
+          <div className={styles.formActions}>
+            <button type="submit">{t("operational.submissionNew")}</button>
+            <button type="button" onClick={() => setCreating(false)}>
+              {t("common.cancel")}
+            </button>
+          </div>
+        </form>
+      ) : null}
+
+      {canReview && phase.submissions.length === 0 ? (
+        <button
+          type="button"
+          className={styles.deleteBtn}
+          onClick={() => {
+            if (window.confirm(`${t("operational.phaseNewTrigger")}?`)) {
+              onRemovePhase(phase.id);
+            }
+          }}
+        >
+          {t("operational.itemRemove")} {t("operational.phaseCreatedBy")}
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+function PhaseCreateForm({
+  blockedByPrevious,
+  onCreate,
+}: {
+  blockedByPrevious: boolean;
+  onCreate: (data: { period: string }) => Promise<void>;
+}) {
+  const { t } = usePreferences();
+  const toast = useToast();
+  const [open, setOpen] = useState(false);
+  const [period, setPeriod] = useState(currentPeriod());
+  const [busy, setBusy] = useState(false);
+
+  if (blockedByPrevious) {
+    return <p className={styles.hintSmall}>{t("operational.phaseNewBlockedByPrevious")}</p>;
+  }
+
+  if (!open) {
+    return (
+      <button type="button" className={styles.primaryAction} onClick={() => setOpen(true)}>
+        + {t("operational.phaseNewTrigger")}
+      </button>
+    );
+  }
+
+  return (
+    <form
+      className={styles.createForm}
+      onSubmit={async (e) => {
+        e.preventDefault();
+        setBusy(true);
+        try {
+          await onCreate({ period });
+          setOpen(false);
+        } catch (err) {
+          toast.error(t("operational.phaseNewTrigger"), err instanceof Error ? err.message : String(err));
+        } finally {
+          setBusy(false);
+        }
+      }}
+    >
+      <label>
+        <span>{t("operational.kasbonPeriod")}</span>
+        <input
+          required
+          value={period}
+          onChange={(e) => setPeriod(e.target.value)}
+          placeholder="YYYY-MM"
+          pattern="\d{4}-\d{2}"
+        />
+      </label>
+      <div className={styles.formActions}>
+        <button type="submit" disabled={busy} aria-busy={busy}>
+          {busy ? t("common.saving") : t("operational.phaseNewTrigger")}
+        </button>
+        <button type="button" onClick={() => setOpen(false)}>
+          {t("common.cancel")}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export default function OperationalPage() {
+  const { user, token } = useAuth();
+  const { t } = usePreferences();
+  const toast = useToast();
+  const operational = useOperational();
+  const [tab, setTab] = useState<Tab>("report");
+  const [phaseFilter, setPhaseFilter] = useState<string>("ALL");
+  const [busyDownload, setBusyDownload] = useState(false);
+
+  if (!user) return null;
+  const canReview = canReviewKasbon(user);
+  const canOpenPhase = canCreateKasbonPhase(user);
+  const hasKasbonAccess = canAccessKasbon(user);
+  const canEditAnyReport = !!user.isSuperAdmin;
+  const activeTab = hasKasbonAccess ? tab : "report";
+
+  const phaseNumbers = Array.from(new Set(operational.kasbonPhases.map((p) => p.phase))).sort((a, b) => a - b);
+  const visiblePhases =
+    phaseFilter === "ALL"
+      ? operational.kasbonPhases
+      : operational.kasbonPhases.filter((p) => String(p.phase) === phaseFilter);
+
+  // For the "Open new phase" gate: the most recent phase (any status)
+  // must be REALIZED before OM can open a new one. So we look at the
+  // latest phase in the most recent period.
+  const sortedPhases = [...operational.kasbonPhases].sort(
+    (a, b) => (a.period < b.period ? 1 : a.period > b.period ? -1 : b.phase - a.phase)
+  );
+  const latestPhase = sortedPhases[0];
+  const blockedByPrevious = !latestPhase || latestPhase.status !== "REALIZED";
+
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.header}>
+        <h1>{t("nav.operational")}</h1>
+        <p>{t("operational.pageDescription")}</p>
+      </div>
+
+      <div className={styles.tabs} role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === "report"}
+          className={activeTab === "report" ? `${styles.tab} ${styles.tabActive}` : styles.tab}
+          onClick={() => setTab("report")}
+        >
+          {t("operational.tabDailyReport")}
+        </button>
+        {hasKasbonAccess && (
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === "kasbon"}
+            className={activeTab === "kasbon" ? `${styles.tab} ${styles.tabActive}` : styles.tab}
+            onClick={() => setTab("kasbon")}
+          >
+            {t("operational.tabKasbon")}
+          </button>
+        )}
+      </div>
+
+      {!operational.hydrated ? (
+        <p className={styles.loading}>{t("operational.loading")}</p>
+      ) : activeTab === "report" ? (
+        <>
+          <ReportForm
+            onCreate={async ({ date, activities, pendingFiles }) => {
+              const created = await operational.createReport({ date, activities });
+              if (pendingFiles && pendingFiles.length > 0) {
+                for (const f of pendingFiles) {
+                  try {
+                    await operational.addReportAttachment(created.id, f);
+                  } catch (err) {
+                    console.error("Failed to attach", f.fileName, err);
+                  }
+                }
+              }
+            }}
+          />
+          {operational.dailyReports.length === 0 ? (
+            <p className={styles.emptyHint}>{t("operational.reportEmpty")}</p>
+          ) : (
+            <div className={styles.list}>
+              {operational.dailyReports.map((r) => (
+                <ReportCard
+                  key={r.id}
+                  report={r}
+                  canEdit={canEditAnyReport || r.userId === user.id}
+                  onUpdate={operational.updateReport}
+                  onRemove={operational.removeReport}
+                  onAddAttachment={operational.addReportAttachment}
+                  onRemoveAttachment={operational.removeReportAttachment}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {canOpenPhase && (
+            <PhaseCreateForm
+              blockedByPrevious={blockedByPrevious}
+              onCreate={async (data) => {
+                try {
+                  await operational.createPhase(data);
+                } catch (err) {
+                  toast.error(t("operational.phaseNewTrigger"), err instanceof Error ? err.message : String(err));
+                  throw err;
+                }
+              }}
+            />
+          )}
+
+          {operational.kasbonPhases.length > 0 && (
+            <div className={styles.filterBar}>
+              <span>{t("common.filterBy")}:</span>
+              <select value={phaseFilter} onChange={(e) => setPhaseFilter(e.target.value)}>
+                <option value="ALL">{t("operational.phaseFilterAll")}</option>
+                {phaseNumbers.map((n) => (
+                  <option key={n} value={String(n)}>
+                    Phase {n}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {visiblePhases.length === 0 ? (
+            <p className={styles.emptyHint}>{t("operational.phaseEmpty")}</p>
+          ) : (
+            <div className={styles.list}>
+              {visiblePhases.map((p) => (
+                <PhaseCard
+                  key={p.id}
+                  phase={p}
+                  currentUserId={user.id}
+                  canReview={canReview}
+                  onCreateSubmission={operational.createSubmission}
+                  onAddItem={operational.addItem}
+                  onUpdateItem={operational.updateItem}
+                  onRemoveItem={operational.removeItem}
+                  onRealizeItem={operational.realizeItem}
+                  onSubmitSubmission={operational.submitSubmission}
+                  onReviewSubmission={operational.reviewSubmission}
+                  onDownloadSubmission={async (id, hint) => {
+                    setBusyDownload(true);
+                    try {
+                      await operational.downloadSubmission(id, hint);
+                    } catch (err) {
+                      toast.error(
+                        t("operational.exportSubmission"),
+                        err instanceof Error ? err.message : String(err)
+                      );
+                    } finally {
+                      setBusyDownload(false);
+                    }
+                  }}
+                  onRemovePhase={operational.removePhase}
+                  busy={busyDownload}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}

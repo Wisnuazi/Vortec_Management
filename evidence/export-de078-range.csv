@@ -1,0 +1,4 @@
+createdAt,userName,action,entityType,entityId,description
+2026-09-15T13:26:56.784Z,Super Admin,sop.create,SOP,cmu2phfyd001qrm01kdmtgvjt,"Membuat SOP ""sadasd"""
+2026-09-15T13:26:45.585Z,Super Admin,workflow.create,Workflow,cmu2ph7ax001mrm01zml6o7u2,"Membuat workflow ""tes"""
+# rows: 2

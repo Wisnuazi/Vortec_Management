@@ -1,0 +1,168 @@
+/* DEC-082: shared approval card styles — used by /approvals and its
+   sub-routes (/approvals/material-requests, /approvals/kasbon). */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-4);
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.projectTag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-accent-wash);
+  border-radius: var(--r-full);
+  padding: 0.15rem 0.6rem;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--color-ink);
+  flex: 1;
+}
+
+.roleBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-full);
+  background: var(--color-surface-sunken);
+  color: var(--color-ink-muted);
+}
+
+.hintSmall {
+  font-size: 0.78rem;
+  color: var(--color-ink-faint);
+}
+
+.notes {
+  font-size: 0.86rem;
+  color: var(--color-ink-muted);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  font-size: 0.86rem;
+  color: var(--color-ink);
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-md);
+  padding: 0.4rem 0.6rem;
+}
+
+.attachList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.attachItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.82rem;
+}
+
+.attachItem a {
+  color: var(--color-accent);
+}
+
+.actions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.approveBtn {
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--r-md);
+  border: none;
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  cursor: pointer;
+}
+
+.approveBtn:hover {
+  background: var(--color-accent-hover);
+}
+
+.approveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rejectBtn {
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-danger);
+  background: transparent;
+  color: var(--color-danger);
+  cursor: pointer;
+}
+
+.rejectBtn:hover {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.rejectBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.inlineForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.inlineForm input {
+  flex: 1;
+  min-width: 160px;
+  font-size: 0.84rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.expandBtn {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-sm);
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.expandBtn:hover {
+  background: var(--color-surface-sunken);
+}

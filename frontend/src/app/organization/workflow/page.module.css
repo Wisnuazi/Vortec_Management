@@ -1,0 +1,498 @@
+/* ==========================================================================
+   Organization > Workflow library
+   ========================================================================== */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  max-width: 1100px;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.header h1 {
+  font-size: 1.4rem;
+  margin: 4px 0;
+}
+
+.header p {
+  color: var(--color-ink-muted);
+  font-size: 0.86rem;
+  margin: 0;
+  max-width: 60ch;
+}
+
+.backLink {
+  font-size: 0.78rem;
+  color: var(--color-ink-muted);
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.headerActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* === Toolbar (search + layout toggle) ==================================== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.searchBox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--r-md);
+  padding: 6px 10px;
+  min-height: 36px;
+  color: var(--color-ink-muted);
+}
+
+.searchBox:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash);
+}
+
+.searchBox input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.86rem;
+  color: var(--color-ink);
+}
+
+.searchBox button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-ink-muted);
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+}
+
+/* === Grouped sections ==================================================== */
+.groupedWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.categoryBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.categoryTitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 700;
+  margin: 0;
+}
+
+/* === Grid / list layouts ================================================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--sp-3);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* === Workflow card ====================================================== */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-3) var(--sp-4);
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+
+.card:hover {
+  border-color: var(--color-accent-wash-border);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardTitleBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+
+.cardTitle {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+}
+
+.cardMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-ink-muted);
+}
+
+.attachmentCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.74rem;
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+}
+
+.cardCaret {
+  font-size: 0.9rem;
+  transition: transform var(--dur-fast) ease;
+  color: var(--color-ink-faint);
+}
+
+.cardCaret[data-open="true"] {
+  transform: rotate(180deg);
+  color: var(--color-accent);
+}
+
+.cardActions {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.cardActions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-sm);
+  background: var(--color-surface);
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+
+.cardActions button:hover {
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+  border-color: var(--color-accent-wash-border);
+}
+
+.cardActions .dangerBtn:hover {
+  background: var(--color-danger-wash);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.cardDescription {
+  font-size: 0.86rem;
+  color: var(--color-ink-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--sp-3);
+  margin-top: 4px;
+}
+
+.stepsBlock h3,
+.attachmentsBlock h3 {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.stepsText {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  background: var(--color-surface-sunken);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.emptyHint {
+  font-size: 0.8rem;
+  color: var(--color-ink-faint);
+  margin: 0;
+}
+
+.attachmentList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.attachmentRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: var(--color-surface-sunken);
+  border-radius: var(--r-sm);
+}
+
+.attachmentLink {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--color-ink);
+  font-size: 0.84rem;
+  padding: 4px 6px;
+  border-radius: var(--r-sm);
+  transition: background-color var(--dur-fast) ease;
+}
+
+.attachmentLink:hover {
+  background: var(--color-accent-wash);
+}
+
+.attachmentName {
+  flex: 1;
+  font-weight: 500;
+}
+
+.attachmentSize {
+  font-size: 0.74rem;
+  color: var(--color-ink-muted);
+}
+
+.removeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  color: var(--color-ink-muted);
+}
+
+.removeBtn:hover {
+  background: var(--color-danger-wash);
+  color: var(--color-danger);
+}
+
+.uploadRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.uploadOr {
+  color: var(--color-ink-faint);
+  font-size: 0.78rem;
+}
+
+.uploadBtn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--r-sm);
+  background: var(--color-surface);
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+
+.uploadBtn:hover:not(:disabled) {
+  background: var(--color-accent-wash);
+  color: var(--color-accent);
+  border-color: var(--color-accent-wash-border);
+}
+
+.uploadBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.cardFoot {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px dashed var(--color-border);
+  padding-top: var(--sp-2);
+  font-size: 0.74rem;
+  color: var(--color-ink-faint);
+}
+
+.auditText {
+  font-style: italic;
+}
+
+/* === Modal ============================================================== */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--sp-4);
+}
+
+.modal {
+  background: var(--color-surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-lg);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modalHead h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.modalHead button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-ink-muted);
+  display: inline-flex;
+  align-items: center;
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-5);
+  overflow-y: auto;
+}
+
+.modalBody label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+}
+
+.modalBody input,
+.modalBody textarea {
+  font-size: 0.92rem;
+  font-weight: 400;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+
+.modalBody input:focus,
+.modalBody textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-wash);
+}
+
+.required {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.formError {
+  font-size: 0.8rem;
+  color: var(--color-danger-ink);
+  background: var(--color-danger-wash);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+  margin: 0;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: var(--sp-4) var(--sp-5);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-sunken);
+}
+
+/* DEC-069: modal actions use shared <Button> (see Button.module.css). */
+.modalActions {
+  display: flex;
+  gap: var(--sp-2);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}

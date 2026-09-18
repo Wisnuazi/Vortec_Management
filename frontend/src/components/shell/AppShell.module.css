@@ -1,0 +1,123 @@
+.shell {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  min-height: 100dvh;
+}
+
+.mainCol {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.main {
+  flex: 1;
+  padding: var(--sp-8);
+  outline: none;
+}
+
+.loadingScreen {
+  min-height: 100dvh;
+  background: var(--color-bg);
+}
+
+/* --- skip link ------------------------------------------------------------ */
+.skipLink {
+  position: absolute;
+  left: var(--sp-3);
+  top: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  border-radius: var(--r-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 2000;
+  transform: translateY(-200%);
+  transition: transform 120ms ease;
+}
+.skipLink:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--color-accent-on);
+  outline-offset: 2px;
+}
+
+/* --- mobile drawer ------------------------------------------------------- */
+.mobileHeader {
+  display: none;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.mobileBrand {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.mobileBrand img {
+  height: 20px;
+  width: auto;
+  display: block;
+}
+
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.menuButton:hover {
+  background: var(--color-surface-sunken);
+}
+
+.menuButton:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 13, 12, 0.5);
+  z-index: 40;
+  animation: fadeIn 160ms ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .main {
+    padding: var(--sp-5);
+  }
+  .mobileHeader {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim {
+    animation: none;
+  }
+}
